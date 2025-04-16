@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreThemeRequest;
 use App\Http\Requests\UpdateThemeRequest;
 use App\Models\Theme;
-use Inertia\Inertia;
 use Illuminate\Support\Facades\Storage;
+use Inertia\Inertia;
 
 class ThemeController extends Controller
 {
@@ -18,6 +18,7 @@ class ThemeController extends Controller
         return $this->handleResourceAction(
             function () {
                 $themes = Theme::paginate(10);
+
                 return Inertia::render('themes/Index', [
                     'themes' => $themes,
                 ]);
@@ -57,6 +58,7 @@ class ThemeController extends Controller
                     $validated['poster'] = $request->file('poster')->store('posters', 'public');
                 }
                 Theme::create($validated);
+
                 return redirect()->route('themes.index')
                     ->with('success', 'Created');
             },
@@ -132,6 +134,7 @@ class ThemeController extends Controller
                     unset($validated['poster']);
                 }
                 $theme->update($validated);
+
                 return redirect()->route('themes.index')
                     ->with('success', 'Theme updated successfully');
             },
@@ -156,6 +159,7 @@ class ThemeController extends Controller
                     Storage::disk('public')->delete($theme->poster);
                 }
                 $theme->delete();
+
                 return redirect()->route('themes.index')
                     ->with('success', 'Theme deleted successfully');
             },

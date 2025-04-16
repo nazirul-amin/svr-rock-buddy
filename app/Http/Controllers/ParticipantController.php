@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreParticipantRequest;
 use App\Http\Requests\UpdateParticipantRequest;
 use App\Models\Participant;
-use Exception;
 use Inertia\Inertia;
 
 class ParticipantController extends Controller
@@ -18,6 +17,7 @@ class ParticipantController extends Controller
         return $this->handleResourceAction(
             function () {
                 $participants = Participant::paginate(10);
+
                 return Inertia::render('participants/Index', [
                     'participants' => $participants,
                 ]);
@@ -57,6 +57,7 @@ class ParticipantController extends Controller
                     'name' => $validated['name'],
                     'email' => $validated['email'],
                 ]);
+
                 return redirect()->route('participants.index')
                     ->with('success', 'Participant created successfully');
             },
@@ -117,6 +118,7 @@ class ParticipantController extends Controller
                     'name' => $validated['name'],
                     'email' => $validated['email'],
                 ]);
+
                 return redirect()->route('participants.index')
                     ->with('success', 'Participant updated successfully');
             },
@@ -137,6 +139,7 @@ class ParticipantController extends Controller
         return $this->handleResourceAction(
             function () use ($participant) {
                 $participant->delete();
+
                 return redirect()->route('participants.index')
                     ->with('success', 'Participant deleted successfully');
             },
