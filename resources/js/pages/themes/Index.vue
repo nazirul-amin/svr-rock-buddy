@@ -1,4 +1,6 @@
 <script setup>
+import Pagination from '@/components/Pagination.vue';
+import Table from '@/components/Table.vue';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import AppLayout from '@/layouts/AppLayout.vue';
@@ -40,95 +42,52 @@ const confirmDelete = (theme) => {
                                 Add Theme
                             </Link>
                         </div>
-                        <div v-if="themes.data.length === 0" class="text-gray-500">No themes found.</div>
-                        <div v-else class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                                <thead class="bg-gray-50 dark:bg-gray-800">
-                                    <tr>
-                                        <th class="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase dark:text-gray-300">
-                                            Name
-                                        </th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase dark:text-gray-300">
-                                            From
-                                        </th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase dark:text-gray-300">
-                                            To
-                                        </th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase dark:text-gray-300">
-                                            Poster
-                                        </th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase dark:text-gray-300">
-                                            Descriptions
-                                        </th>
-                                        <th
-                                            class="px-6 py-3 text-right text-xs font-medium tracking-wider text-gray-500 uppercase dark:text-gray-300"
-                                        >
-                                            Actions
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody class="dark:bg-card divide-y divide-gray-200 bg-white dark:divide-gray-700">
-                                    <tr v-for="theme in themes.data" :key="theme.id" class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
-                                        <td class="px-6 py-4 whitespace-nowrap">{{ theme.name }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">{{ theme.from }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">{{ theme.to }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <img
-                                                v-if="theme.poster"
-                                                :src="`/storage/${theme.poster}`"
-                                                alt="Poster"
-                                                class="h-12 w-12 rounded border object-cover"
-                                            />
-                                            <span v-else class="text-gray-400 italic">No poster</span>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">{{ theme.descriptions }}</td>
-                                        <td class="px-6 py-4 text-right text-sm whitespace-nowrap">
-                                            <div class="flex items-center justify-end space-x-2">
-                                                <Button
-                                                    variant="default"
-                                                    class="cursor-pointer"
-                                                    @click="
-                                                        () => {
-                                                            router.visit(route('themes.show', theme.id));
-                                                        }
-                                                    "
-                                                >
-                                                    View
-                                                </Button>
-                                                <Button
-                                                    class="cursor-pointer bg-gray-500 text-white transition duration-200 hover:bg-gray-600"
-                                                    @click="
-                                                        () => {
-                                                            router.visit(route('themes.edit', theme.id));
-                                                        }
-                                                    "
-                                                >
-                                                    Edit
-                                                </Button>
-                                                <Dialog>
-                                                    <DialogTrigger asChild>
-                                                        <Button variant="destructive" class="cursor-pointer" @click="themeToDelete.value = theme"
-                                                            >Delete</Button
-                                                        >
-                                                    </DialogTrigger>
-                                                    <DialogContent className="sm:max-w-[425px]">
-                                                        <DialogHeader>
-                                                            <DialogTitle>Delete theme</DialogTitle>
-                                                            <DialogDescription>
-                                                                Are you sure you want to delete this theme? This action cannot be undone.
-                                                            </DialogDescription>
-                                                        </DialogHeader>
-                                                        <DialogFooter>
-                                                            <Button type="button" variant="destructive" @click="confirmDelete(theme)">Delete</Button>
-                                                        </DialogFooter>
-                                                    </DialogContent>
-                                                </Dialog>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                        <Table
+                            :columns="[
+                                { key: 'name', label: 'Name' },
+                                { key: 'from', label: 'From' },
+                                { key: 'to', label: 'To' },
+                                { key: 'poster', label: 'Poster', type: 'image' },
+                                { key: 'descriptions', label: 'Descriptions' },
+                            ]"
+                            :rows="themes.data"
+                            :key-field="'id'"
+                        >
+                            <template #cell-poster="{ value }">
+                                <img v-if="value" :src="`/storage/${value}`" alt="Poster" class="h-12 w-12 rounded border object-cover" />
+                                <span v-else class="text-gray-400 italic">No poster</span>
+                            </template>
+                            <template #actions="{ row: theme }">
+                                <div class="flex items-center justify-end space-x-2">
+                                    <Button variant="default" class="cursor-pointer" @click="() => router.visit(route('themes.show', theme.id))">
+                                        View
+                                    </Button>
+                                    <Button
+                                        class="cursor-pointer bg-gray-500 text-white transition duration-200 hover:bg-gray-600"
+                                        @click="() => router.visit(route('themes.edit', theme.id))"
+                                    >
+                                        Edit
+                                    </Button>
+                                    <Dialog>
+                                        <DialogTrigger asChild>
+                                            <Button variant="destructive" class="cursor-pointer">Delete</Button>
+                                        </DialogTrigger>
+                                        <DialogContent className="sm:max-w-[425px]">
+                                            <DialogHeader>
+                                                <DialogTitle>Delete theme</DialogTitle>
+                                                <DialogDescription>
+                                                    Are you sure you want to delete this theme? This action cannot be undone.
+                                                </DialogDescription>
+                                            </DialogHeader>
+                                            <DialogFooter>
+                                                <Button type="button" variant="destructive" @click="confirmDelete(theme)">Delete</Button>
+                                            </DialogFooter>
+                                        </DialogContent>
+                                    </Dialog>
+                                </div>
+                            </template>
+                        </Table>
+                        <Pagination :meta="themes" :links="themes.links" />
                     </div>
                 </div>
             </div>
