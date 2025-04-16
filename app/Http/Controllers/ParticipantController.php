@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreParticipantRequest;
 use App\Http\Requests\UpdateParticipantRequest;
 use App\Models\Participant;
+use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\ParticipantsImport;
 use Inertia\Inertia;
 
 class ParticipantController extends Controller
@@ -150,5 +153,21 @@ class ParticipantController extends Controller
             [],
             true
         );
+    }
+
+    /**
+     * Import participants from a CSV or Excel file.
+     */
+    public function bulkStore(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|file|mimes:csv,xlsx,xls',
+        ]);
+        try {
+            Excel::import(new ParticipantsImport, $request->file('file'));
+            return redirect()->route('participants.index')->with('success', 'Participants imported successfully!');
+        } catch (\Exception $e) {
+            return back()->withErrors(['file' => 'Import failed: ' . $e->getMessage()]);
+        }
     }
 }

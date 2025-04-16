@@ -4,9 +4,10 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AppLayout from '@/layouts/AppLayout.vue';
-import { Head } from '@inertiajs/vue3';
+import { Head, router } from '@inertiajs/vue3';
 import { useForm } from 'laravel-precognition-vue-inertia';
 import { LoaderCircle } from 'lucide-vue-next';
+import { ref } from 'vue';
 
 const breadcrumbs = [
     { title: 'Participants', href: route('participants.index') },
@@ -18,11 +19,35 @@ const form = useForm('post', route('participants.store'), {
     email: '',
 });
 
-const submit = () =>
+const submit = () => {
     form.submit({
         preserveScroll: true,
         onSuccess: () => form.reset(),
     });
+};
+
+const bulkFile = ref(null);
+const bulkProcessing = ref(false);
+const bulkError = ref('');
+
+const submitBulk = () => {
+    bulkProcessing.value = true;
+    bulkError.value = '';
+    const formData = new FormData();
+    formData.append('file', bulkFile.value);
+    router.post(route('participants.bulk'), formData, {
+        forceFormData: true,
+        onFinish: () => {
+            bulkProcessing.value = false;
+        },
+        onSuccess: () => {
+            bulkFile.value = null;
+        },
+        onError: (errors) => {
+            bulkError.value = errors.file || 'Bulk upload failed';
+        },
+    });
+};
 </script>
 
 <template>
@@ -69,6 +94,25 @@ const submit = () =>
                                     <span v-else>Create Participant</span>
                                 </Button>
                             </div>
+                        </form>
+
+                        <!-- Bulk Registration Form -->
+                        <form @submit.prevent="submitBulk" enctype="multipart/form-data" class="mt-8 max-w-2xl">
+                            <div class="mb-4 space-y-2">
+                                <Label for="bulk_file">Bulk Register (CSV or Excel)</Label>
+                                <Input
+                                    id="bulk_file"
+                                    type="file"
+                                    accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+                                    @change="(e) => (bulkFile = e.target.files[0])"
+                                    required
+                                />
+                            </div>
+                            <Button variant="default" type="submit" :disabled="bulkProcessing" class="cursor-pointer">
+                                <LoaderCircle v-if="bulkProcessing" class="h-4 w-4 animate-spin" />
+                                <span v-else>Bulk Register</span>
+                            </Button>
+                            <InputError :message="bulkError" />
                         </form>
                     </div>
                 </div>
