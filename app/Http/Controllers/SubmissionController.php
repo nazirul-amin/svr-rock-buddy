@@ -86,7 +86,10 @@ class SubmissionController extends Controller
      */
     public function show(Submission $submission)
     {
-        //
+        $submission->load(['participant', 'theme']);
+        return inertia('submissions/Show', [
+            'submission' => $submission,
+        ]);
     }
 
     /**

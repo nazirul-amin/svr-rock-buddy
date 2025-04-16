@@ -78,8 +78,10 @@ class ThemeController extends Controller
     {
         return $this->handleResourceAction(
             function () use ($theme) {
+                $submissions = $theme->submissions()->with('participant')->latest()->get();
                 return Inertia::render('themes/Show', [
                     'theme' => $theme,
+                    'submissions' => $submissions,
                 ]);
             },
             'show',

@@ -1,16 +1,10 @@
 <script setup>
-function copyPublicLink() {
-    const url = route('submissions.public.form', props.theme.id);
-    navigator.clipboard.writeText(window.location.origin + url);
-    alert('Submission link copied to clipboard!');
-}
-
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { Head, Link, router } from '@inertiajs/vue3';
 
-const props = defineProps({ theme: Object });
+const props = defineProps({ theme: Object, submissions: Array });
 
 const breadcrumbs = [
     { title: 'Themes', href: route('themes.index') },
@@ -22,6 +16,12 @@ const confirmDelete = () => {
         onFinish: () => {},
     });
 };
+
+function copyPublicLink() {
+    const url = route('submissions.public.form', props.theme.id);
+    navigator.clipboard.writeText(window.location.origin + url);
+    alert('Submission link copied to clipboard!');
+}
 </script>
 
 <template>
@@ -123,6 +123,53 @@ const confirmDelete = () => {
                             </Dialog>
                         </div>
                     </div>
+                    <!-- Submissions List -->
+                    <div v-if="props.submissions && props.submissions.length" class="mt-12 p-6">
+                        <h2 class="mb-4 text-xl font-semibold">Submissions</h2>
+                        <div class="overflow-x-auto rounded-lg border dark:border-gray-700">
+                            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                                <thead class="bg-gray-50 dark:bg-gray-800">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase dark:text-gray-300">
+                                            Participant Name
+                                        </th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase dark:text-gray-300">
+                                            Email
+                                        </th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase dark:text-gray-300">
+                                            Score
+                                        </th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase dark:text-gray-300">
+                                            Submitted At
+                                        </th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase dark:text-gray-300">
+                                            Actions
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-200 bg-white dark:divide-gray-800 dark:bg-gray-900">
+                                    <tr v-for="submission in props.submissions" :key="submission.id">
+                                        <td class="px-6 py-4 whitespace-nowrap">{{ submission.participant?.name || '-' }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">{{ submission.participant?.email || '-' }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">{{ submission.participant?.score || '-' }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            {{ submission.created_at ? new Date(submission.created_at).toLocaleString() : '-' }}
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <Button
+                                                variant="default"
+                                                class="cursor-pointer"
+                                                @click="() => router.visit(route('submissions.show', submission.id))"
+                                            >
+                                                View
+                                            </Button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div v-else class="mt-12 p-6 text-gray-500 dark:text-gray-400">No submissions yet.</div>
                 </div>
             </div>
         </div>
