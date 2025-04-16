@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ParticipantController;
 use App\Http\Controllers\ScoreController;
+use App\Http\Controllers\SubmissionController;
 use App\Http\Controllers\ThemeController;
 use Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests;
 use Illuminate\Support\Facades\Route;
@@ -20,7 +21,14 @@ Route::middleware(['auth', 'verified', HandlePrecognitiveRequests::class])->grou
         'participants' => ParticipantController::class,
         'scores' => ScoreController::class,
         'themes' => ThemeController::class,
+        'submissions' => SubmissionController::class,
     ]);
+});
+
+Route::middleware([HandlePrecognitiveRequests::class])->group(function () {
+    Route::get('themes/{theme}/submit', [SubmissionController::class, 'publicForm'])->name('submissions.public.form');
+    Route::post('themes/{theme}/submit', [SubmissionController::class, 'publicStore'])->name('submissions.public.store');
+    Route::get('themes/{theme}/submit/thankyou', [SubmissionController::class, 'publicThankYou'])->name('submissions.public.thankyou');
 });
 
 require __DIR__ . '/settings.php';

@@ -7,7 +7,7 @@ import { ref } from 'vue';
 
 const breadcrumbs = [{ title: 'Participants', href: route('participants.index') }];
 
-const props = defineProps({
+defineProps({
     participants: {
         type: Object,
     },
@@ -124,7 +124,7 @@ const confirmDelete = (participant) => {
                             <div class="flex items-center justify-between">
                                 <div>Showing {{ participants.from }} to {{ participants.to }} of {{ participants.total }} entries</div>
                                 <div class="flex gap-1">
-                                    <Link
+                                    <a
                                         v-for="(link, index) in participants.links"
                                         :key="index"
                                         :href="link.url"

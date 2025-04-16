@@ -11,4 +11,9 @@ class Participant extends Model
     use HasFactory, HasUlids;
 
     protected $guarded = ['id'];
+
+    public function submissions()
+    {
+        return $this->hasMany(Submission::class);
+    }
 }

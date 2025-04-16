@@ -7,7 +7,7 @@ import { ref } from 'vue';
 
 const breadcrumbs = [{ title: 'Themes', href: route('themes.index') }];
 
-const props = defineProps({
+defineProps({
     themes: {
         type: Object,
     },

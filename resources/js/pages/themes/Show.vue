@@ -1,4 +1,10 @@
 <script setup>
+function copyPublicLink() {
+    const url = route('submissions.public.form', props.theme.id);
+    navigator.clipboard.writeText(window.location.origin + url);
+    alert('Submission link copied to clipboard!');
+}
+
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import AppLayout from '@/layouts/AppLayout.vue';
@@ -34,6 +40,21 @@ const confirmDelete = () => {
                                 >
                                     Edit
                                 </Link>
+                                <button
+                                    @click="copyPublicLink"
+                                    class="rounded-md bg-green-600 px-4 py-2 text-white transition duration-200 hover:bg-green-700 focus:ring-2 focus:ring-green-600 focus:ring-offset-2 focus:outline-none"
+                                    type="button"
+                                >
+                                    Copy Submission Link
+                                </button>
+                                <a
+                                    :href="route('submissions.public.form', props.theme.id)"
+                                    target="_blank"
+                                    rel="noopener"
+                                    class="rounded-md bg-blue-600 px-4 py-2 text-white transition duration-200 hover:bg-blue-700 focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 focus:outline-none"
+                                >
+                                    Open Submission Form
+                                </a>
                             </div>
                         </div>
 
