@@ -52,6 +52,13 @@ return [
 
     'channels' => [
 
+        'resource' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/resource.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+            'days' => 7,
+        ],
+
         'stack' => [
             'driver' => 'stack',
             'channels' => explode(',', env('LOG_STACK', 'single')),

@@ -32,9 +32,14 @@ createInertiaApp({
             .mount(el);
     },
     progress: {
-        color: '#4B5563',
+        color: '#ff5a63',
     },
 });
 
 // This will set light / dark mode on page load...
 initializeTheme();
+
+// Add a class to the body when the page is loaded to enable smooth transitions
+document.addEventListener('DOMContentLoaded', () => {
+  document.body.classList.add('theme-loaded');
+});

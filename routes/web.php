@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\ParticipantController;
+use App\Http\Controllers\ScoreController;
+use Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -10,6 +13,13 @@ Route::get('/', function () {
 Route::get('dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware(['auth', 'verified', HandlePrecognitiveRequests::class])->group(function () {
+    Route::resources([
+        'participants' => ParticipantController::class,
+        'scores' => ScoreController::class,
+    ]);
+});
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';
