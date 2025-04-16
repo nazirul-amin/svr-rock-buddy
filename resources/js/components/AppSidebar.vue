@@ -16,8 +16,13 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Participants',
-        href: route('participants.index'),
+        href: '/participants',
         icon: Users,
+    },
+    {
+        title: 'Themes',
+        href: '/themes',
+        icon: Folder,
     },
 ];
 

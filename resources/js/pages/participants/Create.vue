@@ -1,12 +1,16 @@
-<script setup lang="ts">
+<script setup>
 import AppLayout from '@/layouts/AppLayout.vue';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import InputError from '@/components/InputError.vue';
+import { Label } from '@/components/ui/label';
 import { Head } from '@inertiajs/vue3';
 import { useForm } from 'laravel-precognition-vue-inertia';
+import { LoaderCircle } from 'lucide-vue-next';
 
 const breadcrumbs = [
-  { name: 'Participants', href: route('participants.index'), current: false },
-  { name: 'Create', href: route('participants.create'), current: true }
+  { title: 'Participants', href: route('participants.index') },
+  { title: 'Create', href: route('participants.create') }
 ];
 
 const form = useForm('post', route('participants.store'), {
@@ -21,8 +25,8 @@ const submit = () => form.submit({
 </script>
 
 <template>
+    <Head title="Create Participant" />
     <AppLayout :breadcrumbs="breadcrumbs">
-        <Head title="Create Participant" />
 
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -30,50 +34,40 @@ const submit = () => form.submit({
                     <div class="p-6 text-gray-900 dark:text-white">
                         <div class="flex items-center justify-between mb-6">
                             <h1 class="text-2xl font-semibold text-primary">Create Participant</h1>
-                            <a
-                                :href="route('participants.index')"
-                                class="px-4 py-2 bg-gray-300 text-gray-800 dark:bg-gray-700 dark:text-gray-200 rounded-md hover:bg-gray-400 dark:hover:bg-gray-600 transition duration-200"
-                            >
-                                Back to List
-                            </a>
                         </div>
 
                         <form @submit.prevent="submit" class="max-w-2xl">
-                            <div class="mb-4">
-                                <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-200">Name</label>
-                                <input
+                            <div class="mb-4 space-y-2">
+                                <Label for="name">Name</Label>
+                                <Input
                                     id="name"
                                     v-model="form.name"
                                     type="text"
+                                    placeholder="Enter participant name"
                                     @change="form.validate('name')"
-                                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary dark:bg-gray-800"
                                     required
                                 />
                                 <InputError :message="form.errors.name" />
                             </div>
 
-                            <div class="mb-6">
-                                <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-200">Email</label>
-                                <input
+                            <div class="mb-6 space-y-2">
+                                <Label for="email">Email</Label>
+                                <Input
                                     id="email"
                                     v-model="form.email"
                                     type="email"
+                                    placeholder="Enter participant email"
                                     @change="form.validate('email')"
-                                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary dark:bg-gray-800"
                                     required
                                 />
                                 <InputError :message="form.errors.email" />
                             </div>
 
-                            <div class="flex items-center">
-                                <button
-                                    type="submit"
-                                    class="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition duration-200"
-                                    :disabled="form.processing"
-                                >
-                                    <span v-if="form.processing">Processing...</span>
+                            <div class="flex items-center justify-end">
+                                <Button variant="default" type="submit" :disabled="form.processing" class="cursor-pointer">
+                                    <LoaderCircle v-if="form.processing" class="h-4 w-4 animate-spin" />
                                     <span v-else>Create Participant</span>
-                                </button>
+                                </Button>
                             </div>
                         </form>
                     </div>

@@ -53,7 +53,7 @@ class ParticipantController extends Controller
         return $this->handleResourceAction(
             function () use ($request) {
                 $validated = $request->validated();
-                $participant = Participant::create([
+                Participant::create([
                     'name' => $validated['name'],
                     'email' => $validated['email'],
                 ]);
@@ -62,7 +62,7 @@ class ParticipantController extends Controller
             },
             'store',
             'Participant',
-            "Participant created: {$participant->id}",
+            'Participant created successfully',
             'Failed to create participant. Please try again.',
             [],
             true
@@ -122,7 +122,7 @@ class ParticipantController extends Controller
             },
             'update',
             'Participant',
-            "Participant updated: {$participant->id}",
+            'Participant updated successfully',
             'Failed to update participant. Please try again.',
             [],
             true
@@ -136,14 +136,13 @@ class ParticipantController extends Controller
     {
         return $this->handleResourceAction(
             function () use ($participant) {
-                $participantId = $participant->id;
                 $participant->delete();
                 return redirect()->route('participants.index')
                     ->with('success', 'Participant deleted successfully');
             },
             'destroy',
             'Participant',
-            "Participant deleted: {$participant->id}",
+            'Participant deleted successfully',
             'Failed to delete participant. Please try again.',
             [],
             true

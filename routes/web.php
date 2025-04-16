@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ParticipantController;
 use App\Http\Controllers\ScoreController;
+use App\Http\Controllers\ThemeController;
 use Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -18,6 +19,7 @@ Route::middleware(['auth', 'verified', HandlePrecognitiveRequests::class])->grou
     Route::resources([
         'participants' => ParticipantController::class,
         'scores' => ScoreController::class,
+        'themes' => ThemeController::class,
     ]);
 });
 

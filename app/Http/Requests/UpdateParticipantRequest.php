@@ -12,7 +12,6 @@ class UpdateParticipantRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        // Only allow authenticated users (assumed to be admins)
         return Auth::check();
     }
 
@@ -25,7 +24,7 @@ class UpdateParticipantRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:participants,email,'.request()->route('participant'),
+            'email' => 'required|string|email|max:255|unique:participants,email,'.request()->route('participant')->id,
         ];
     }
 }
