@@ -41,5 +41,5 @@ initializeTheme();
 
 // Add a class to the body when the page is loaded to enable smooth transitions
 document.addEventListener('DOMContentLoaded', () => {
-  document.body.classList.add('theme-loaded');
+    document.body.classList.add('theme-loaded');
 });

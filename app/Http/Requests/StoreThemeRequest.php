@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class StoreThemeRequest extends FormRequest
 {
@@ -11,7 +12,7 @@ class StoreThemeRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return Auth::check();
     }
 
     /**
@@ -22,7 +23,11 @@ class StoreThemeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => 'required|string|max:255',
+            'from' => 'required|date',
+            'to' => 'required|date',
+            'poster' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
+            'descriptions' => 'nullable|string',
         ];
     }
 }

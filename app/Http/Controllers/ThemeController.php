@@ -6,6 +6,7 @@ use App\Http\Requests\StoreThemeRequest;
 use App\Http\Requests\UpdateThemeRequest;
 use App\Models\Theme;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Storage;
 
 class ThemeController extends Controller
 {
@@ -52,6 +53,10 @@ class ThemeController extends Controller
         return $this->handleResourceAction(
             function () use ($request) {
                 $validated = $request->validated();
+                if ($request->hasFile('poster')) {
+                    $validated['poster'] = $request->file('poster')->store('posters', 'public');
+                }
+                Theme::create($validated);
                 return redirect()->route('themes.index')
                     ->with('success', 'Created');
             },
@@ -108,6 +113,24 @@ class ThemeController extends Controller
         return $this->handleResourceAction(
             function () use ($request, $theme) {
                 $validated = $request->validated();
+                // Handle poster removal
+                if ($request->input('_remove_poster')) {
+                    if ($theme->poster && Storage::disk('public')->exists($theme->poster)) {
+                        Storage::disk('public')->delete($theme->poster);
+                    }
+                    $validated['poster'] = null;
+                }
+                // Handle poster upload
+                elseif ($request->hasFile('poster')) {
+                    // Delete old poster if exists
+                    if ($theme->poster && Storage::disk('public')->exists($theme->poster)) {
+                        Storage::disk('public')->delete($theme->poster);
+                    }
+                    $validated['poster'] = $request->file('poster')->store('posters', 'public');
+                } else {
+                    // Do not update the poster field if not changed
+                    unset($validated['poster']);
+                }
                 $theme->update($validated);
                 return redirect()->route('themes.index')
                     ->with('success', 'Theme updated successfully');
@@ -128,6 +151,10 @@ class ThemeController extends Controller
     {
         return $this->handleResourceAction(
             function () use ($theme) {
+                // Delete poster file if it exists
+                if ($theme->poster && Storage::disk('public')->exists($theme->poster)) {
+                    Storage::disk('public')->delete($theme->poster);
+                }
                 $theme->delete();
                 return redirect()->route('themes.index')
                     ->with('success', 'Theme deleted successfully');

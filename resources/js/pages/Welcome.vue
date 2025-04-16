@@ -7,8 +7,8 @@ import { Head, Link } from '@inertiajs/vue3';
         <link rel="preconnect" href="https://rsms.me/" />
         <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
     </Head>
-    <div class="flex min-h-screen flex-col items-center bg-[#FDFDFC] p-6 text-[#1b1b18] dark:bg-[#0a0a0a] lg:justify-center lg:p-8">
-        <header class="not-has-[nav]:hidden mb-6 w-full max-w-[335px] text-sm lg:max-w-4xl">
+    <div class="flex min-h-screen flex-col items-center bg-[#FDFDFC] p-6 text-[#1b1b18] lg:justify-center lg:p-8 dark:bg-[#0a0a0a]">
+        <header class="mb-6 w-full max-w-[335px] text-sm not-has-[nav]:hidden lg:max-w-4xl">
             <nav class="flex items-center justify-end gap-4">
                 <Link
                     v-if="$page.props.auth.user"
@@ -27,10 +27,10 @@ import { Head, Link } from '@inertiajs/vue3';
                 </template>
             </nav>
         </header>
-        <div class="duration-750 starting:opacity-0 flex w-full items-center justify-center opacity-100 transition-opacity lg:grow">
+        <div class="flex w-full items-center justify-center opacity-100 transition-opacity duration-750 lg:grow starting:opacity-0">
             <main class="flex w-full max-w-[335px] flex-col-reverse overflow-hidden rounded-lg lg:max-w-4xl lg:flex-row">
                 <div
-                    class="flex-1 rounded-bl-lg rounded-br-lg bg-white p-6 pb-12 text-[13px] leading-[20px] shadow-[inset_0px_0px_0px_1px_rgba(26,26,0,0.16)] dark:bg-[#161615] dark:text-[#EDEDEC] dark:shadow-[inset_0px_0px_0px_1px_#fffaed2d] lg:rounded-br-none lg:rounded-tl-lg lg:p-20"
+                    class="flex-1 rounded-br-lg rounded-bl-lg bg-white p-6 pb-12 text-[13px] leading-[20px] shadow-[inset_0px_0px_0px_1px_rgba(26,26,0,0.16)] lg:rounded-tl-lg lg:rounded-br-none lg:p-20 dark:bg-[#161615] dark:text-[#EDEDEC] dark:shadow-[inset_0px_0px_0px_1px_#fffaed2d]"
                 >
                     <h1 class="mb-1 font-medium">Welcome to Rock Buddy</h1>
                     <p class="mb-2 text-[#706f6c] dark:text-[#A1A09A]">
@@ -38,7 +38,7 @@ import { Head, Link } from '@inertiajs/vue3';
                     </p>
                     <ul class="mb-4 flex flex-col lg:mb-6">
                         <li
-                            class="relative flex items-center gap-4 py-2 before:absolute before:bottom-0 before:left-[0.4rem] before:top-1/2 before:border-l before:border-[#e3e3e0] dark:before:border-[#3E3E3A]"
+                            class="relative flex items-center gap-4 py-2 before:absolute before:top-1/2 before:bottom-0 before:left-[0.4rem] before:border-l before:border-[#e3e3e0] dark:before:border-[#3E3E3A]"
                         >
                             <span class="relative bg-white py-1 dark:bg-[#161615]">
                                 <span
@@ -47,12 +47,10 @@ import { Head, Link } from '@inertiajs/vue3';
                                     <span class="h-1.5 w-1.5 rounded-full bg-[#ff5a63] dark:bg-[#ff5a63]" />
                                 </span>
                             </span>
-                            <span>
-                                Submit photos of your pet rock matching monthly themes
-                            </span>
+                            <span> Submit photos of your pet rock matching monthly themes </span>
                         </li>
                         <li
-                            class="relative flex items-center gap-4 py-2 before:absolute before:bottom-1/2 before:left-[0.4rem] before:top-0 before:border-l before:border-[#e3e3e0] dark:before:border-[#3E3E3A]"
+                            class="relative flex items-center gap-4 py-2 before:absolute before:top-0 before:bottom-1/2 before:left-[0.4rem] before:border-l before:border-[#e3e3e0] dark:before:border-[#3E3E3A]"
                         >
                             <span class="relative bg-white py-1 dark:bg-[#161615]">
                                 <span
@@ -61,12 +59,10 @@ import { Head, Link } from '@inertiajs/vue3';
                                     <span class="h-1.5 w-1.5 rounded-full bg-[#fe804d] dark:bg-[#fe804d]" />
                                 </span>
                             </span>
-                            <span>
-                                Track your competition score and ranking
-                            </span>
+                            <span> Track your competition score and ranking </span>
                         </li>
                         <li
-                            class="relative flex items-center gap-4 py-2 before:absolute before:bottom-1/2 before:left-[0.4rem] before:top-0 before:border-l before:border-[#e3e3e0] dark:before:border-[#3E3E3A]"
+                            class="relative flex items-center gap-4 py-2 before:absolute before:top-0 before:bottom-1/2 before:left-[0.4rem] before:border-l before:border-[#e3e3e0] dark:before:border-[#3E3E3A]"
                         >
                             <span class="relative bg-white py-1 dark:bg-[#161615]">
                                 <span
@@ -75,9 +71,7 @@ import { Head, Link } from '@inertiajs/vue3';
                                     <span class="h-1.5 w-1.5 rounded-full bg-[#ff5a63] dark:bg-[#ff5a63]" />
                                 </span>
                             </span>
-                            <span>
-                                Receive monthly newsletters with winners and new themes
-                            </span>
+                            <span> Receive monthly newsletters with winners and new themes </span>
                         </li>
                     </ul>
                     <ul class="flex gap-3 text-sm leading-normal">
@@ -92,13 +86,22 @@ import { Head, Link } from '@inertiajs/vue3';
                     </ul>
                 </div>
                 <div
-                    class="relative -mb-px aspect-335/376 w-full shrink-0 overflow-hidden rounded-t-lg bg-[#fff2f2] dark:bg-[#1D0002] lg:-ml-px lg:mb-0 lg:aspect-auto lg:w-[438px] lg:rounded-r-lg lg:rounded-t-none"
+                    class="relative -mb-px aspect-335/376 w-full shrink-0 overflow-hidden rounded-t-lg bg-[#fff2f2] lg:mb-0 lg:-ml-px lg:aspect-auto lg:w-[438px] lg:rounded-t-none lg:rounded-r-lg dark:bg-[#1D0002]"
                 >
                     <div class="flex h-full flex-col items-center justify-center p-8 lg:p-12">
-                        <svg class="w-24 h-24 lg:w-32 lg:h-32 text-[#ff5a63]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M18 8c0-3.3-2.7-6-6-6S6 4.7 6 8c0 2.6 1.7 4.8 4 5.7V16H8v2h2v2h4v-2h2v-2h-2v-2.3c2.3-.9 4-3.1 4-5.7z"/>
-                            <path d="M12 19v3"/>
-                            <path d="M10 22h4"/>
+                        <svg
+                            class="h-24 w-24 text-[#ff5a63] lg:h-32 lg:w-32"
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <path d="M18 8c0-3.3-2.7-6-6-6S6 4.7 6 8c0 2.6 1.7 4.8 4 5.7V16H8v2h2v2h4v-2h2v-2h-2v-2.3c2.3-.9 4-3.1 4-5.7z" />
+                            <path d="M12 19v3" />
+                            <path d="M10 22h4" />
                         </svg>
                         <h1 class="mt-6 text-4xl font-bold text-[#ff5a63]">Rock Buddy</h1>
                         <p class="mt-2 text-xl font-medium text-[#fe804d]">Pet Rock Photo Competition</p>
