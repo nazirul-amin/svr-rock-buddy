@@ -46,7 +46,7 @@ const confirmDelete = (result) => {
                         >
                             <template #cell-themes="{ row: result }">
                                 <ul>
-                                    <li v-for="theme in result.themes">{{ theme.name }}</li>
+                                    <li v-for="theme in result.themes" :key="theme.id">{{ theme.name }}</li>
                                 </ul>
                             </template>
                             <template #cell-is_active="{ row: result }">

@@ -29,7 +29,7 @@ const breadcrumbs = [
 const form = useForm('put', route('results.update', props.result), {
     name: props.result.name,
     is_active: props.result.is_active ? true : false,
-    theme_ids: props.result.theme_ids || [],
+    theme_ids: props.result.themes.map((theme) => theme.id) || [],
 });
 
 const submit = () =>

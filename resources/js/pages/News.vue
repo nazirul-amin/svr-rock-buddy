@@ -36,7 +36,7 @@ const { play: playSad } = useAudio('/audio/lose.mp3');
 onMounted(() => {
     if (highlightData.value && highlightData.value.rank === 1) {
         showDialog.value = true;
-        launchConfettiParty();
+        setTimeout(() => launchConfettiParty(), 2000);
         playConfetti();
     } else if (highlightData.value && highlightData.value.rank != 1) {
         launchSadParty();

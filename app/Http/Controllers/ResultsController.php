@@ -36,7 +36,7 @@ class ResultsController extends Controller
             ->pluck('id')
             ->toArray();
         if (empty($submissions)) {
-            return back()->withErrors(['email' => 'No submissions found for this participant in this result.'])->withInput();
+            return back()->withErrors(['email' => 'You haven\'t submitted anything for this round. Try again next one.'])->withInput();
         }
         return redirect()->route('news', [
             'participant' => $participant->id,
