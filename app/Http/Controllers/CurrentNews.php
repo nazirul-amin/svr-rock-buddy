@@ -19,7 +19,7 @@ class CurrentNews extends Controller
             ->map(function ($s) {
                 return [
                     'id' => $s->id,
-                    'image' => $s->path ? asset('storage/' . $s->path) : null,
+                    'image' => $s->path ? asset('storage/'.$s->path) : null,
                     'participant' => $s->participant ? ['name' => $s->participant->name] : null,
                     'theme' => $s->theme ? ['title' => $s->theme->title] : null,
                     'score' => $s->score ?? 0,
@@ -40,12 +40,13 @@ class CurrentNews extends Controller
                 ->map(function ($s) {
                     return [
                         'id' => $s->id,
-                        'image' => $s->path ? asset('storage/' . $s->path) : null,
+                        'image' => $s->path ? asset('storage/'.$s->path) : null,
                         'participant' => $s->participant ? ['name' => $s->participant->name] : null,
                         'score' => $s->score ?? 0,
                     ];
                 });
         }
+
         return inertia('News', [
             'submissions' => $submissions,
             'theme' => $theme,

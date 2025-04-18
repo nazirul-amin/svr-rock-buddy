@@ -3,8 +3,8 @@
 use App\Http\Controllers\CurrentNews;
 use App\Http\Controllers\ParticipantController;
 use App\Http\Controllers\RankingController;
-use App\Http\Controllers\SubmissionController;
 use App\Http\Controllers\ScoreController;
+use App\Http\Controllers\SubmissionController;
 use App\Http\Controllers\ThemeController;
 use Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests;
 use Illuminate\Support\Facades\Route;

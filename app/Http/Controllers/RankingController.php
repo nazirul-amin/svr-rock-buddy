@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Theme;
 use App\Models\Participant;
-use Illuminate\Http\Request;
+use App\Models\Theme;
 use Inertia\Inertia;
-use Illuminate\Support\Facades\DB;
 
 class RankingController extends Controller
 {
