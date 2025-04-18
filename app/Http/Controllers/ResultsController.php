@@ -2,21 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreResultRequest;
+use App\Http\Requests\UpdateResultRequest;
+use App\Models\Participant;
 use App\Models\Result;
 use App\Models\Submission;
 use App\Models\Theme;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use App\Http\Requests\StoreResultRequest;
-use App\Http\Requests\UpdateResultRequest;
-use App\Models\Participant;
 
 class ResultsController extends Controller
 {
     public function check(Result $result)
     {
         return Inertia::render('results/Check', [
-            'theme' => $result->themes->pluck('name')->when(count($result->themes) > 1, fn($names) => $names->implode(' x ')),
+            'theme' => $result->themes->pluck('name')->when(count($result->themes) > 1, fn ($names) => $names->implode(' x ')),
             'result' => $result,
         ]);
     }
@@ -27,7 +27,7 @@ class ResultsController extends Controller
             'email' => 'required|email',
         ]);
         $participant = Participant::where('email', $request->email)->first();
-        if (!$participant) {
+        if (! $participant) {
             return back()->withErrors(['email' => 'No participant found for this email.'])->withInput();
         }
         $themeIds = $result->themes->pluck('id');
@@ -38,6 +38,7 @@ class ResultsController extends Controller
         if (empty($submissions)) {
             return back()->withErrors(['email' => 'You haven\'t submitted anything for this round. Try again next one.'])->withInput();
         }
+
         return redirect()->route('news', [
             'participant' => $participant->id,
             'result' => $result->id,
@@ -49,6 +50,7 @@ class ResultsController extends Controller
         return $this->handleResourceAction(
             function () {
                 $themes = Theme::all();
+
                 return Inertia::render('results/Create', [
                     'themes' => $themes,
                 ]);
@@ -65,6 +67,7 @@ class ResultsController extends Controller
         return $this->handleResourceAction(
             function () use ($result) {
                 $result->load('themes');
+
                 return Inertia::render('results/Show', [
                     'result' => $result,
                 ]);
@@ -82,6 +85,7 @@ class ResultsController extends Controller
             function () use ($result) {
                 $result->load('themes');
                 $themes = Theme::all();
+
                 return Inertia::render('results/Edit', [
                     'result' => $result,
                     'themes' => $themes,
@@ -100,6 +104,7 @@ class ResultsController extends Controller
             function () {
                 $results = Result::with('themes')->paginate(10);
                 $themes = Theme::all();
+
                 return Inertia::render('results/Index', [
                     'results' => $results,
                     'themes' => $themes,
@@ -121,9 +126,10 @@ class ResultsController extends Controller
                     'name' => $validated['name'],
                     'is_active' => $validated['is_active'],
                 ]);
-                if (!empty($validated['theme_ids'])) {
+                if (! empty($validated['theme_ids'])) {
                     $result->themes()->sync($validated['theme_ids']);
                 }
+
                 return redirect()->route('results.index')->with('success', 'Result created successfully');
             },
             'store',
@@ -140,11 +146,12 @@ class ResultsController extends Controller
         return $this->handleResourceAction(
             function () use ($request, $result) {
                 $data = $request->validated();
-                $data['is_active'] = isset($data['is_active']) ? (bool)$data['is_active'] : false;
+                $data['is_active'] = isset($data['is_active']) ? (bool) $data['is_active'] : false;
                 $result->update($data);
-                if (!empty($data['theme_ids'])) {
+                if (! empty($data['theme_ids'])) {
                     $result->themes()->sync($data['theme_ids']);
                 }
+
                 return redirect()->route('results.index')->with('success', 'Result updated successfully');
             },
             'update',
@@ -161,6 +168,7 @@ class ResultsController extends Controller
         return $this->handleResourceAction(
             function () use ($result) {
                 $result->delete();
+
                 return redirect()->back()->with('success', 'Results deleted.');
             },
             'destroy',
