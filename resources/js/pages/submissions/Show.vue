@@ -10,7 +10,7 @@ import InputError from '@/components/InputError.vue';
 
 const props = defineProps({ submission: Object, scores: Array });
 
-const form = useForm('post', route('submissions.store'), {
+const form = useForm('post', route('submissions.score', props.submission), {
     score: '',
 });
 

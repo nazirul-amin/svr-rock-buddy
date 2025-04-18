@@ -41,10 +41,14 @@ class ScoreController extends Controller
                 $score->user_id = $user->id;
                 $score->submission_id = $submission->id;
                 $score->save();
-        
+
                 $totalScore = $submission->scores()->sum('score');
                 $submission->score = $totalScore;
                 $submission->save();
+
+                $participant = $submission->participant;
+                $participant->score = $totalScore;
+                $participant->save();
 
                 return redirect()->route('submissions.show', $submission)
                     ->with('success', 'Score submitted successfully');

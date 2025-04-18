@@ -12,6 +12,7 @@ return new class extends Migration
             $table->ulid('id')->primary();
             $table->string('name');
             $table->string('email')->unique();
+            $table->double('score')->default(0.0);
             $table->timestamps();
         });
     }
