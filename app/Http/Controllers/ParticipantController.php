@@ -4,11 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreParticipantRequest;
 use App\Http\Requests\UpdateParticipantRequest;
+use App\Imports\ParticipantsImport;
 use App\Models\Participant;
 use Illuminate\Http\Request;
-use Maatwebsite\Excel\Facades\Excel;
-use App\Imports\ParticipantsImport;
 use Inertia\Inertia;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ParticipantController extends Controller
 {
@@ -165,9 +165,10 @@ class ParticipantController extends Controller
         ]);
         try {
             Excel::import(new ParticipantsImport, $request->file('file'));
+
             return redirect()->route('participants.index')->with('success', 'Participants imported successfully!');
         } catch (\Exception $e) {
-            return back()->withErrors(['file' => 'Import failed: ' . $e->getMessage()]);
+            return back()->withErrors(['file' => 'Import failed: '.$e->getMessage()]);
         }
     }
 }

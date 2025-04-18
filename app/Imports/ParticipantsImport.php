@@ -13,6 +13,7 @@ class ParticipantsImport implements ToModel
         if (isset($row[0], $row[1]) && strtolower($row[0]) === 'email' && strtolower($row[1]) === 'name') {
             return null;
         }
+
         return Participant::firstOrCreate([
             'email' => $row[0],
         ], [

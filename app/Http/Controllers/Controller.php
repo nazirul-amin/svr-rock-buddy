@@ -32,7 +32,7 @@ abstract class Controller
 
             return $result;
         } catch (Exception $e) {
-            Log::channel('resource')->error($errorMsg ?: ("Error during {$action} on {$resource}: " . $e->getMessage()), array_merge(['action' => $action, 'resource' => $resource, 'message' => $e->getMessage(), 'trace' => $e->getTrace()], $extraContext));
+            Log::channel('resource')->error($errorMsg ?: ("Error during {$action} on {$resource}: ".$e->getMessage()), array_merge(['action' => $action, 'resource' => $resource, 'message' => $e->getMessage(), 'trace' => $e->getTrace()], $extraContext));
 
             return back()->withErrors(['error' => $errorMsg ?: 'An error occurred. Please try again.'])->withInput();
         }

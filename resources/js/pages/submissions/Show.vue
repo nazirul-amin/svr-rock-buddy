@@ -2,11 +2,11 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
+import InputError from '@/components/InputError.vue';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import AppLayout from '@/layouts/AppLayout.vue';
-import { Head } from '@inertiajs/vue3';
+import { Head, router } from '@inertiajs/vue3';
 import { useForm } from 'laravel-precognition-vue-inertia';
-import InputError from '@/components/InputError.vue';
 
 const props = defineProps({ submission: Object, scores: Array });
 
@@ -94,14 +94,16 @@ const breadcrumbs = [
                                         <video :src="`/storage/${props.submission.path}`" controls class="max-h-96 max-w-full rounded border" />
                                     </template>
                                     <template v-else>
-                                        <a :href="`/storage/${props.submission.path}`" target="_blank" class="text-blue-600 underline">Download/View</a>
+                                        <a :href="`/storage/${props.submission.path}`" target="_blank" class="text-blue-600 underline"
+                                            >Download/View</a
+                                        >
                                     </template>
                                 </div>
                             </div>
 
                             <!-- Scoring List -->
                             <div class="mt-8">
-                                <div class="flex justify-between mb-4 p-2">
+                                <div class="mb-4 flex justify-between p-2">
                                     <h2 class="mb-2 text-lg font-semibold">Markah</h2>
                                     <Dialog>
                                         <DialogTrigger asChild>
@@ -110,9 +112,7 @@ const breadcrumbs = [
                                         <DialogContent className="sm:max-w-[425px]">
                                             <DialogHeader>
                                                 <DialogTitle>Score Submission</DialogTitle>
-                                                <DialogDescription>
-                                                    Please enter a score for this submission.
-                                                </DialogDescription>
+                                                <DialogDescription> Please enter a score for this submission. </DialogDescription>
                                                 <Input
                                                     v-model="form.score"
                                                     type="number"
@@ -127,16 +127,18 @@ const breadcrumbs = [
                                                 <InputError :message="form.errors.score" />
                                             </DialogHeader>
                                             <DialogFooter>
-                                                <Button type="button" variant="destructive" @click="submit()" class="cursor-pointer">Add Score</Button>
+                                                <Button type="button" variant="destructive" @click="submit()" class="cursor-pointer"
+                                                    >Add Score</Button
+                                                >
                                             </DialogFooter>
                                         </DialogContent>
                                     </Dialog>
                                 </div>
-                                <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 bg-white dark:bg-gray-900 rounded-lg">
+                                <table class="min-w-full divide-y divide-gray-200 rounded-lg bg-white dark:divide-gray-700 dark:bg-gray-900">
                                     <thead>
                                         <tr>
-                                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">User</th>
-                                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Score</th>
+                                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase dark:text-gray-300">User</th>
+                                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase dark:text-gray-300">Score</th>
                                         </tr>
                                     </thead>
                                     <tbody>

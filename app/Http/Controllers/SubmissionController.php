@@ -2,17 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Theme;
-use Illuminate\Http\Request;
-
 use App\Http\Requests\StoreSubmissionRequest;
 use App\Http\Requests\UpdateSubmissionRequest;
 use App\Models\Participant;
 use App\Models\Submission;
+use App\Models\Theme;
 
 class SubmissionController extends Controller
 {
-
     /**
      * Show the public submission form for a theme.
      */
@@ -37,7 +34,7 @@ class SubmissionController extends Controller
 
         // Find participant by email (must exist due to validation)
         $participant = Participant::where('email', $validated['email'])->first();
-        if (!$participant) {
+        if (! $participant) {
             // This should not occur if validation is correct, but is a safety net
             return back()->withErrors(['email' => 'Email not found. Please use a registered email.'])->withInput();
         }
@@ -47,8 +44,10 @@ class SubmissionController extends Controller
 
         // Create the submission
         Submission::create($validated);
+
         return redirect()->route('submissions.public.thankyou', $theme)->with('success', 'Submission received!');
     }
+
     /**
      * Thank you page after public submission.
      */
@@ -87,9 +86,10 @@ class SubmissionController extends Controller
     public function show(Submission $submission)
     {
         $submission->load(['participant', 'theme', 'scores.user']);
+
         return inertia('submissions/Show', [
             'submission' => $submission,
-            'scores' => $submission->scores->map(function($score) {
+            'scores' => $submission->scores->map(function ($score) {
                 return [
                     'id' => $score->id,
                     'user' => [

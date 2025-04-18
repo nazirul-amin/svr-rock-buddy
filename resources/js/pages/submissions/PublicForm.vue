@@ -42,10 +42,10 @@ function onFileChange(e) {
 </script>
 
 <template>
-    <Head :title="`Submit Entry for ${props.theme.name}`" />
+    <Head :title="`Submit Entry for ${theme.name}`" />
     <div class="flex min-h-screen items-center justify-center bg-gray-50 dark:bg-gray-900">
         <div class="dark:bg-card w-full max-w-md rounded bg-white p-8 shadow">
-            <h1 class="text-primary mb-4 text-2xl font-bold">Submit Entry for {{ props.theme.name }}</h1>
+            <h1 class="text-primary mb-4 text-2xl font-bold">Submit Entry for {{ theme.name }}</h1>
             <form @submit.prevent="submit" enctype="multipart/form-data" class="space-y-4">
                 <div>
                     <label class="mb-1 block font-medium">Your Email</label>

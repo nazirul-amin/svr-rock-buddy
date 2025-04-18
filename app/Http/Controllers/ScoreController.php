@@ -35,7 +35,7 @@ class ScoreController extends Controller
             function () use ($request, $submission) {
                 $validated = $request->validated();
                 $user = Auth::user();
-        
+
                 $score = $submission->scores()->firstOrNew(['user_id' => $user->id]);
                 $score->score = $validated['score'];
                 $score->user_id = $user->id;

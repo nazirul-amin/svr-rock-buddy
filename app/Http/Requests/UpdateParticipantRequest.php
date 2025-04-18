@@ -24,7 +24,7 @@ class UpdateParticipantRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:participants,email,' . request()->route('participant')->id,
+            'email' => 'required|string|email|max:255|unique:participants,email,'.request()->route('participant')->id,
         ];
     }
 }
