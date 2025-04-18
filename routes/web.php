@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\CurrentNews;
 use App\Http\Controllers\ParticipantController;
-use App\Http\Controllers\ScoreController;
+use App\Http\Controllers\RankingController;
 use App\Http\Controllers\SubmissionController;
+use App\Http\Controllers\ScoreController;
 use App\Http\Controllers\ThemeController;
 use Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests;
 use Illuminate\Support\Facades\Route;
@@ -15,6 +17,10 @@ Route::get('/', function () {
 Route::get('dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::get('/news', CurrentNews::class)->name('news');
+Route::get('/rankings/themes/{theme}', [RankingController::class, 'theme'])->name('rankings.theme');
+Route::get('/rankings/overall', [RankingController::class, 'overall'])->name('rankings.overall');
 
 Route::middleware(['auth', 'verified', HandlePrecognitiveRequests::class])->group(function () {
     Route::post('participants/bulk', [ParticipantController::class, 'bulkStore'])->name('participants.bulk');
