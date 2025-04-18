@@ -15,7 +15,7 @@ const form = useForm('post', route('submissions.public.store', props.theme), {
     file: null,
 });
 
-const submit = () =>
+const submit = () => {
     form.submit({
         preserveScroll: true,
         onSuccess: () => form.reset(),
@@ -23,6 +23,7 @@ const submit = () =>
             console.error(error);
         },
     });
+};
 
 const filePreview = ref(null);
 const isImage = computed(() => {
@@ -43,18 +44,18 @@ function onFileChange(e) {
 
 <template>
     <Head :title="`Submit Entry for ${theme.name}`" />
-    <div class="flex min-h-screen items-center justify-center bg-gray-50 dark:bg-gray-900">
-        <div class="dark:bg-card w-full max-w-md rounded bg-white p-8 shadow">
+    <div class="bg-secondary text-muted flex min-h-screen items-center justify-center">
+        <div class="w-full max-w-md rounded bg-white p-8 shadow">
             <h1 class="text-primary mb-4 text-2xl font-bold">Submit Entry for {{ theme.name }}</h1>
             <form @submit.prevent="submit" enctype="multipart/form-data" class="space-y-4">
                 <div>
                     <label class="mb-1 block font-medium">Your Email</label>
-                    <Input v-model="form.email" type="email" placeholder="Email" required @change="form.validate('email')" />
+                    <Input v-model="form.email" type="email" placeholder="Email" required @change="form.validate('email')" class="!bg-white" />
                     <InputError :message="form.errors.email" />
                 </div>
                 <div>
                     <label class="mb-1 block font-medium">Upload Image/Video</label>
-                    <Input type="file" accept="image/*,video/*" @change="onFileChange" required />
+                    <Input type="file" accept="image/*,video/*" @change="onFileChange" required class="!bg-white" />
                     <InputError :message="form.errors.file" />
                     <div v-if="filePreview" class="mt-2">
                         <img v-if="isImage" :src="filePreview" class="mb-2 max-h-48 rounded border" />

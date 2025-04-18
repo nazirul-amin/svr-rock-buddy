@@ -39,7 +39,7 @@ const breadcrumbs = [
 </script>
 
 <template>
-    <Head :title="`${props.submission.theme?.name || 'Theme'} Submission`" />
+    <Head :title="`${submission.theme?.name || 'Theme'} Submission`" />
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="py-12">
             <div class="mx-auto w-full sm:px-6 lg:px-8">
@@ -47,11 +47,7 @@ const breadcrumbs = [
                     <div class="p-6 text-gray-900 dark:text-white">
                         <div class="mb-6 flex items-center justify-between">
                             <h1 class="text-primary text-2xl font-semibold">Submission Details</h1>
-                            <Button
-                                variant="default"
-                                class="cursor-pointer"
-                                @click="() => router.visit(route('themes.show', props.submission.theme_id))"
-                            >
+                            <Button variant="default" class="cursor-pointer" @click="() => router.visit(route('themes.show', submission.theme_id))">
                                 &larr; Back to Theme
                             </Button>
                         </div>
@@ -59,44 +55,38 @@ const breadcrumbs = [
                             <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
                                 <div>
                                     <h2 class="text-lg font-medium text-gray-600 dark:text-gray-300">Participant Name</h2>
-                                    <p class="mt-1 text-xl">{{ props.submission.participant?.name || '-' }}</p>
+                                    <p class="mt-1 text-xl">{{ submission.participant?.name || '-' }}</p>
                                 </div>
                                 <div>
                                     <h2 class="text-lg font-medium text-gray-600 dark:text-gray-300">Participant Email</h2>
-                                    <p class="mt-1 text-xl">{{ props.submission.participant?.email || '-' }}</p>
+                                    <p class="mt-1 text-xl">{{ submission.participant?.email || '-' }}</p>
                                 </div>
                                 <div>
                                     <h2 class="text-lg font-medium text-gray-600 dark:text-gray-300">Theme</h2>
-                                    <p class="mt-1 text-xl">{{ props.submission.theme?.name || '-' }}</p>
+                                    <p class="mt-1 text-xl">{{ submission.theme?.name || '-' }}</p>
                                 </div>
                                 <div>
                                     <h2 class="text-lg font-medium text-gray-600 dark:text-gray-300">Score</h2>
-                                    <p class="mt-1 text-xl">{{ props.submission.score ?? '-' }}</p>
+                                    <p class="mt-1 text-xl">{{ submission.score ?? '-' }}</p>
                                 </div>
                                 <div>
                                     <h2 class="text-lg font-medium text-gray-600 dark:text-gray-300">Submitted At</h2>
                                     <p class="mt-1 text-xl">
-                                        {{ props.submission.created_at ? new Date(props.submission.created_at).toLocaleString() : '-' }}
+                                        {{ submission.created_at ? new Date(submission.created_at).toLocaleString() : '-' }}
                                     </p>
                                 </div>
                             </div>
-                            <div v-if="props.submission.path">
+                            <div v-if="submission.path">
                                 <h2 class="text-lg font-medium text-gray-600 dark:text-gray-300">Attachment</h2>
                                 <div class="mt-2">
-                                    <template v-if="isImage(props.submission.path)">
-                                        <img
-                                            :src="`/storage/${props.submission.path}`"
-                                            alt="Submission Image"
-                                            class="max-h-96 max-w-full rounded border"
-                                        />
+                                    <template v-if="isImage(submission.path)">
+                                        <img :src="`/storage/${submission.path}`" alt="Submission Image" class="max-h-96 max-w-full rounded border" />
                                     </template>
-                                    <template v-else-if="isVideo(props.submission.path)">
-                                        <video :src="`/storage/${props.submission.path}`" controls class="max-h-96 max-w-full rounded border" />
+                                    <template v-else-if="isVideo(submission.path)">
+                                        <video :src="`/storage/${submission.path}`" controls class="max-h-96 max-w-full rounded border" />
                                     </template>
                                     <template v-else>
-                                        <a :href="`/storage/${props.submission.path}`" target="_blank" class="text-blue-600 underline"
-                                            >Download/View</a
-                                        >
+                                        <a :href="`/storage/${submission.path}`" target="_blank" class="text-blue-600 underline">Download/View</a>
                                     </template>
                                 </div>
                             </div>

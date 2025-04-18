@@ -20,7 +20,7 @@ import { Head, Link } from '@inertiajs/vue3';
                 <template v-else>
                     <Link
                         :href="route('login')"
-                        class="border-primary text-primary hover:border-primary hover:bg-primary hover:text-primary inline-block rounded-sm border px-5 py-1.5 text-sm leading-normal"
+                        class="border-primary text-primary hover:border-primary hover:bg-primary inline-block rounded-sm border px-5 py-1.5 text-sm leading-normal hover:text-white"
                     >
                         Login
                     </Link>

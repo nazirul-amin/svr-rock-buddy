@@ -3,6 +3,7 @@
 use App\Http\Controllers\CurrentNews;
 use App\Http\Controllers\ParticipantController;
 use App\Http\Controllers\RankingController;
+use App\Http\Controllers\ResultsController;
 use App\Http\Controllers\SubmissionController;
 use App\Http\Controllers\ScoreController;
 use App\Http\Controllers\ThemeController;
@@ -19,6 +20,10 @@ Route::get('dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/news', CurrentNews::class)->name('news');
+
+Route::get('/results/check/{result}', [ResultsController::class, 'check'])->name('results.check');
+Route::post('/results/check/{result}', [ResultsController::class, 'checkSubmit'])->name('results.check.submit');
+
 Route::get('/rankings/themes/{theme}', [RankingController::class, 'theme'])->name('rankings.theme');
 Route::get('/rankings/overall', [RankingController::class, 'overall'])->name('rankings.overall');
 
@@ -30,6 +35,7 @@ Route::middleware(['auth', 'verified', HandlePrecognitiveRequests::class])->grou
         'scores' => ScoreController::class,
         'themes' => ThemeController::class,
         'submissions' => SubmissionController::class,
+        'results' => ResultsController::class,
     ]);
 });
 

@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { Head, Link, router } from '@inertiajs/vue3';
+import { ref } from 'vue';
 
 const props = defineProps({ theme: Object, submissions: Array });
 
@@ -17,8 +18,11 @@ const confirmDelete = () => {
     });
 };
 
-const copyPublicLink = () => {
-    const url = route('submissions.public.form', props.theme.id, false);
+const showCopiedToast = ref(false);
+const copiedMessage = ref('');
+
+const copyLink = (route, label = 'Link') => {
+    const url = route;
     const fullUrl = window.location.origin + url;
     const tempInput = document.createElement('input');
     tempInput.value = fullUrl;
@@ -26,12 +30,16 @@ const copyPublicLink = () => {
     tempInput.select();
     document.execCommand('copy');
     document.body.removeChild(tempInput);
-    alert('Submission link copied to clipboard!');
+    copiedMessage.value = `${label} copied!`;
+    showCopiedToast.value = true;
+    setTimeout(() => {
+        showCopiedToast.value = false;
+    }, 1500);
 };
 </script>
 
 <template>
-    <Head :title="`${props.theme.name} - Theme Details`" />
+    <Head :title="`${theme.name} - Theme Details`" />
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="py-12">
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
@@ -41,23 +49,23 @@ const copyPublicLink = () => {
                             <h1 class="text-primary text-2xl font-semibold">Theme Details</h1>
                             <div class="flex space-x-2">
                                 <Link
-                                    :href="route('themes.edit', props.theme.id)"
+                                    :href="route('themes.edit', theme.id)"
                                     class="bg-primary hover:bg-primary/90 focus:ring-primary rounded-md px-4 py-2 text-white transition duration-200 focus:ring-2 focus:ring-offset-2 focus:outline-none"
                                 >
                                     Edit
                                 </Link>
                                 <button
-                                    @click="copyPublicLink"
-                                    class="rounded-md bg-green-600 px-4 py-2 text-white transition duration-200 hover:bg-green-700 focus:ring-2 focus:ring-green-600 focus:ring-offset-2 focus:outline-none"
+                                    @click="copyLink(route('submissions.public.form', theme.id, false), 'Submission link')"
+                                    class="cursor-pointer rounded-md bg-green-600 px-4 py-2 text-white transition duration-200 hover:bg-green-700 focus:ring-2 focus:ring-green-600 focus:ring-offset-2 focus:outline-none"
                                     type="button"
                                 >
                                     Copy Submission Link
                                 </button>
                                 <a
-                                    :href="route('submissions.public.form', props.theme.id)"
+                                    :href="route('submissions.public.form', theme.id)"
                                     target="_blank"
                                     rel="noopener"
-                                    class="rounded-md bg-blue-600 px-4 py-2 text-white transition duration-200 hover:bg-blue-700 focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 focus:outline-none"
+                                    class="cursor-pointer rounded-md bg-blue-600 px-4 py-2 text-white transition duration-200 hover:bg-blue-700 focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 focus:outline-none"
                                 >
                                     Open Submission Form
                                 </a>
@@ -68,22 +76,22 @@ const copyPublicLink = () => {
                             <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
                                 <div>
                                     <h2 class="text-lg font-medium text-gray-600 dark:text-gray-300">Name</h2>
-                                    <p class="mt-1 text-xl">{{ props.theme.name }}</p>
+                                    <p class="mt-1 text-xl">{{ theme.name }}</p>
                                 </div>
                                 <div>
                                     <h2 class="text-lg font-medium text-gray-600 dark:text-gray-300">From</h2>
-                                    <p class="mt-1 text-xl">{{ props.theme.from }}</p>
+                                    <p class="mt-1 text-xl">{{ theme.from }}</p>
                                 </div>
                                 <div>
                                     <h2 class="text-lg font-medium text-gray-600 dark:text-gray-300">To</h2>
-                                    <p class="mt-1 text-xl">{{ props.theme.to }}</p>
+                                    <p class="mt-1 text-xl">{{ theme.to }}</p>
                                 </div>
                                 <div>
                                     <h2 class="text-lg font-medium text-gray-600 dark:text-gray-300">Poster</h2>
                                     <div class="mt-1">
                                         <img
-                                            v-if="props.theme.poster"
-                                            :src="`/storage/${props.theme.poster}`"
+                                            v-if="theme.poster"
+                                            :src="`/storage/${theme.poster}`"
                                             alt="Poster"
                                             class="h-32 rounded border object-contain"
                                         />
@@ -92,15 +100,15 @@ const copyPublicLink = () => {
                                 </div>
                                 <div class="md:col-span-2">
                                     <h2 class="text-lg font-medium text-gray-600 dark:text-gray-300">Descriptions</h2>
-                                    <p class="mt-1 text-xl">{{ props.theme.descriptions || '-' }}</p>
+                                    <p class="mt-1 text-xl">{{ theme.descriptions || '-' }}</p>
                                 </div>
                                 <div>
                                     <h2 class="text-lg font-medium text-gray-600 dark:text-gray-300">Created At</h2>
-                                    <p class="mt-1 text-xl">{{ props.theme.created_at ? new Date(props.theme.created_at).toLocaleString() : '-' }}</p>
+                                    <p class="mt-1 text-xl">{{ theme.created_at ? new Date(theme.created_at).toLocaleString() : '-' }}</p>
                                 </div>
                                 <div>
                                     <h2 class="text-lg font-medium text-gray-600 dark:text-gray-300">Updated At</h2>
-                                    <p class="mt-1 text-xl">{{ props.theme.updated_at ? new Date(props.theme.updated_at).toLocaleString() : '-' }}</p>
+                                    <p class="mt-1 text-xl">{{ theme.updated_at ? new Date(theme.updated_at).toLocaleString() : '-' }}</p>
                                 </div>
                             </div>
                         </div>
@@ -130,7 +138,7 @@ const copyPublicLink = () => {
                         </div>
                     </div>
                     <!-- Submissions List -->
-                    <div v-if="props.submissions && props.submissions.length" class="mt-12 p-6">
+                    <div v-if="submissions && submissions.length" class="mt-12 p-6">
                         <h2 class="mb-4 text-xl font-semibold">Submissions</h2>
                         <div class="overflow-x-auto rounded-lg border dark:border-gray-700">
                             <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
@@ -154,7 +162,7 @@ const copyPublicLink = () => {
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-gray-200 bg-white dark:divide-gray-800 dark:bg-gray-900">
-                                    <tr v-for="submission in props.submissions" :key="submission.id">
+                                    <tr v-for="submission in submissions" :key="submission.id">
                                         <td class="px-6 py-4 whitespace-nowrap">{{ submission.participant?.name || '-' }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap">{{ submission.participant?.email || '-' }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap">{{ submission.participant?.score || '-' }}</td>
@@ -180,4 +188,14 @@ const copyPublicLink = () => {
             </div>
         </div>
     </AppLayout>
+    <transition name="fade">
+        <div
+            v-if="showCopiedToast"
+            class="bg-primary fixed bottom-6 left-1/2 z-50 -translate-x-1/2 rounded px-4 py-2 text-white shadow-lg"
+            role="status"
+            aria-live="polite"
+        >
+            {{ copiedMessage }}
+        </div>
+    </transition>
 </template>
