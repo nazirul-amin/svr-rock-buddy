@@ -22,4 +22,9 @@ class Submission extends Model
         return $this->belongsTo(Participant::class);
     }
 
+    public function scores()
+    {
+        return $this->hasMany(Score::class);
+    }
+
 }

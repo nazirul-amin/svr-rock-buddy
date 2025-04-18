@@ -26,7 +26,7 @@ class UpdateThemeRequest extends FormRequest
             'name' => 'required|string|max:255',
             'from' => 'required|date',
             'to' => 'required|date',
-            'poster' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
+            'poster' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:20480',
             'descriptions' => 'nullable|string',
         ];
     }

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignIdFor(Theme::class);
             $table->foreignIdFor(Participant::class);
             $table->string('path');
-            $table->double('score');
+            $table->double('score')->default(0.0);
             $table->timestamps();
         });
     }

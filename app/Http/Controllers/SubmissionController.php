@@ -86,9 +86,20 @@ class SubmissionController extends Controller
      */
     public function show(Submission $submission)
     {
-        $submission->load(['participant', 'theme']);
+        $submission->load(['participant', 'theme', 'scores.user']);
         return inertia('submissions/Show', [
             'submission' => $submission,
+            'scores' => $submission->scores->map(function($score) {
+                return [
+                    'id' => $score->id,
+                    'user' => [
+                        'id' => $score->user->id,
+                        'name' => $score->user->name,
+                        'email' => $score->user->email,
+                    ],
+                    'score' => $score->score,
+                ];
+            }),
         ]);
     }
 

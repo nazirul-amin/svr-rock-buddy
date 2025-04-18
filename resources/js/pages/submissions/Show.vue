@@ -1,9 +1,25 @@
 <script setup>
 import { Button } from '@/components/ui/button';
-import AppLayout from '@/layouts/AppLayout.vue';
-import { Head, router } from '@inertiajs/vue3';
+import { Input } from '@/components/ui/input';
 
-const props = defineProps({ submission: Object });
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import AppLayout from '@/layouts/AppLayout.vue';
+import { Head } from '@inertiajs/vue3';
+import { useForm } from 'laravel-precognition-vue-inertia';
+import InputError from '@/components/InputError.vue';
+
+const props = defineProps({ submission: Object, scores: Array });
+
+const form = useForm('post', route('submissions.store'), {
+    score: '',
+});
+
+const submit = () => {
+    form.submit({
+        preserveScroll: true,
+        onSuccess: () => form.reset(),
+    });
+};
 
 function getExtension(path) {
     return path ? path.split('.').pop().toLowerCase() : '';
@@ -78,11 +94,61 @@ const breadcrumbs = [
                                         <video :src="`/storage/${props.submission.path}`" controls class="max-h-96 max-w-full rounded border" />
                                     </template>
                                     <template v-else>
-                                        <a :href="`/storage/${props.submission.path}`" target="_blank" class="text-blue-600 underline"
-                                            >Download/View</a
-                                        >
+                                        <a :href="`/storage/${props.submission.path}`" target="_blank" class="text-blue-600 underline">Download/View</a>
                                     </template>
                                 </div>
+                            </div>
+
+                            <!-- Scoring List -->
+                            <div class="mt-8">
+                                <div class="flex justify-between mb-4 p-2">
+                                    <h2 class="mb-2 text-lg font-semibold">Markah</h2>
+                                    <Dialog>
+                                        <DialogTrigger asChild>
+                                            <Button variant="default" class="cursor-pointer">Add Score</Button>
+                                        </DialogTrigger>
+                                        <DialogContent className="sm:max-w-[425px]">
+                                            <DialogHeader>
+                                                <DialogTitle>Score Submission</DialogTitle>
+                                                <DialogDescription>
+                                                    Please enter a score for this submission.
+                                                </DialogDescription>
+                                                <Input
+                                                    v-model="form.score"
+                                                    type="number"
+                                                    min="0"
+                                                    max="15"
+                                                    step="0.01"
+                                                    class="w-full"
+                                                    placeholder="Enter score (e.g. 9.5)"
+                                                    @change="form.validate('score')"
+                                                    required
+                                                />
+                                                <InputError :message="form.errors.score" />
+                                            </DialogHeader>
+                                            <DialogFooter>
+                                                <Button type="button" variant="destructive" @click="submit()" class="cursor-pointer">Add Score</Button>
+                                            </DialogFooter>
+                                        </DialogContent>
+                                    </Dialog>
+                                </div>
+                                <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 bg-white dark:bg-gray-900 rounded-lg">
+                                    <thead>
+                                        <tr>
+                                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">User</th>
+                                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Score</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="score in props.scores" :key="score.id">
+                                            <td class="px-4 py-2 whitespace-nowrap">{{ score.user.name }} ({{ score.user.email }})</td>
+                                            <td class="px-4 py-2 whitespace-nowrap">{{ score.score }}</td>
+                                        </tr>
+                                        <tr v-if="props.scores.length === 0">
+                                            <td colspan="2" class="px-4 py-2 text-center text-gray-400">No scores yet.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>

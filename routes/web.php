@@ -18,6 +18,7 @@ Route::get('dashboard', function () {
 
 Route::middleware(['auth', 'verified', HandlePrecognitiveRequests::class])->group(function () {
     Route::post('participants/bulk', [ParticipantController::class, 'bulkStore'])->name('participants.bulk');
+    Route::post('submissions/{submission}/score', [ScoreController::class, 'store'])->name('submissions.score');
     Route::resources([
         'participants' => ParticipantController::class,
         'scores' => ScoreController::class,

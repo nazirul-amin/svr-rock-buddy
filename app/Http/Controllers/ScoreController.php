@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreScoreRequest;
 use App\Http\Requests\UpdateScoreRequest;
 use App\Models\Score;
+use App\Models\Submission;
+use Illuminate\Support\Facades\Auth;
 
 class ScoreController extends Controller
 {
@@ -27,9 +29,30 @@ class ScoreController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreScoreRequest $request)
+    public function store(StoreScoreRequest $request, Submission $submission)
     {
-        //
+        return $this->handleResourceAction(
+            function () use ($request, $submission) {
+                $validated = $request->validated();
+                $user = Auth::user();
+        
+                $score = $submission->scores()->firstOrNew(['user_id' => $user->id]);
+                $score->score = $validated['score'];
+                $score->user_id = $user->id;
+                $score->submission_id = $submission->id;
+                $score->save();
+        
+                $totalScore = $submission->scores()->sum('score');
+                $submission->score = $totalScore;
+                $submission->save();
+
+                return redirect()->route('submissions.show', $submission)
+                    ->with('success', 'Score submitted successfully');
+            },
+            action: 'store',
+            resource: 'Score',
+            useTransaction: true,
+        );
     }
 
     /**

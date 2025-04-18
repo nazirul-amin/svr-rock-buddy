@@ -17,11 +17,17 @@ const confirmDelete = () => {
     });
 };
 
-function copyPublicLink() {
-    const url = route('submissions.public.form', props.theme.id);
-    navigator.clipboard.writeText(window.location.origin + url);
+const copyPublicLink = () => {
+    const url = route('submissions.public.form', props.theme.id, false);
+    const fullUrl = window.location.origin + url;
+    const tempInput = document.createElement('input');
+    tempInput.value = fullUrl;
+    document.body.appendChild(tempInput);
+    tempInput.select();
+    document.execCommand('copy');
+    document.body.removeChild(tempInput);
     alert('Submission link copied to clipboard!');
-}
+};
 </script>
 
 <template>
