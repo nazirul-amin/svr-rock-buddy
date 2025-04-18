@@ -72,7 +72,7 @@ class CurrentNews extends Controller
             $participantTotals[$participantId]['submissions'][] = $submission;
         }
         uasort($participantTotals, fn($a, $b) => $b['score'] <=> $a['score']);
-        $top3Overall = array_slice(array_values($participantTotals), 0, 3);
+        $top3 = array_slice(array_values($participantTotals), 0, 3);
 
         $highlightedResult = null;
         if ($request->has('participant') && $request->has('result')) {
@@ -107,7 +107,7 @@ class CurrentNews extends Controller
         }
 
         return Inertia::render('News', [
-            'top3' => $top3Overall,
+            'top3' => $top3,
             'title' => $activeResult->themes->pluck('name')->when(count($activeResult->themes) > 1, fn($names) => $names->implode(' x ')),
             'submissions' => $submissions,
             'highlightedResult' => $highlightedResult,

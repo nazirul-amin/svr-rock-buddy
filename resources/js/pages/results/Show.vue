@@ -56,7 +56,7 @@ const confirmDelete = () => {
                                 </Link>
                                 <button
                                     @click="copyLink(route('results.check', result, false), 'Result link')"
-                                    class="cursor-pointer rounded-md bg-blue-600 px-4 py-2 text-white transition duration-200 hover:bg-blue-700 focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 focus:outline-none"
+                                    class="cursor-pointer rounded-md bg-cyan-600 px-4 py-2 text-white transition duration-200 hover:bg-cyan-700 focus:ring-2 focus:ring-cyan-600 focus:ring-offset-2 focus:outline-none"
                                     type="button"
                                 >
                                     Copy Result Link
