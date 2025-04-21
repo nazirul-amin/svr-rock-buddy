@@ -17,10 +17,12 @@
         "laravel/telescope": "^5.7",
         "laravel/tinker": "^2.10.1",
         "maatwebsite/excel": "^3.1",
+        "predis/predis": "^2.0",
         "prism-php/prism": "^0.61.0",
         "tightenco/ziggy": "^2.4"
     },
     "require-dev": {
+        "deployer/deployer": "^7.5",
         "fakerphp/faker": "^1.23",
         "laravel/pail": "^1.2.2",
         "laravel/pint": "^1.18",
