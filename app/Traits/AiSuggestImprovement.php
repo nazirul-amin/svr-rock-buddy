@@ -1,19 +1,19 @@
 <?php
 
-namespace App\Services;
+namespace App\Traits;
 
 use Illuminate\Support\Collection;
 use App\Models\Submission;
 use Illuminate\Support\Facades\Storage;
-use Prism\Prism\Enums\Provider;
 use Prism\Prism\Prism;
+use Prism\Prism\Enums\Provider;
 use Prism\Prism\ValueObjects\Messages\Support\Image;
 use Prism\Prism\ValueObjects\Messages\UserMessage;
 
-class OpenAIService
+trait AiSuggestImprovement
 {
     /**
-     * Generate improvement suggestions for a participant.
+     * Generate fun and casual improvement suggestions for a participant.
      *
      * @param  Collection|Submission[]  $submissions
      * @return string
@@ -21,16 +21,15 @@ class OpenAIService
     public function suggestImprovement(Collection $submissions): string
     {
         $messages = [];
-        $basePath = config('app.url');
 
         foreach ($submissions as $submission) {
-            $theme = $submission->theme->name ?? 'Unknown';
+            $theme = $submission->theme->name ?? 'a mystery theme';
             $score = $submission->score;
             $path  = $submission->path;
             $image = Image::fromPath(Storage::disk('public')->path($path));
 
             $content = sprintf(
-                "The theme for this submission is %s and the total Score of %d which is an aggregate of six judges, each scoring 10–15 points. Attached are the submission",
+                "Alrighty, here's a submission with the theme '%s' and it scored %d points (from six judges, each giving 0–15). Have a look at the attached masterpiece and let us know what you think! Feel free to be cheeky, creative, and constructive.",
                 $theme,
                 $score
             );
@@ -38,7 +37,7 @@ class OpenAIService
             $messages[] = new UserMessage($content, [$image]);
         }
 
-        $systemPrompt = "You are a seasoned judge in a pet rock decorating competition with over 10 years of experiences. Analyse each submission, evaluate styling, creativity, theme alignment and the awarded score";
+        $systemPrompt = "You're a super enthusiastic judge in a wildly fun pet rock decorating competition. You've seen it all—googly eyes, glitter overload, and pom pom perfection. Review the submissions and give playful, encouraging feedback with suggestions to level up the creativity, style, and theme vibes.";
 
         $response = Prism::text()
             ->using(Provider::Gemini, 'gemini-2.0-flash')

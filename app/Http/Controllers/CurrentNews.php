@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Result;
 use App\Models\Submission;
-use App\Services\OpenAIService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Traits\AiSuggestImprovement;
 
 class CurrentNews extends Controller
 {
+    use AiSuggestImprovement;
+
     /**
      * Handle the incoming request.
      */
@@ -111,8 +113,7 @@ class CurrentNews extends Controller
             ];
 
             if ($highlightedResult['overall_rank'] !== 1) {
-                $openAiService = new OpenAIService();
-                $highlightedResult['suggestion'] = $openAiService->suggestImprovement($highlightSubmissions);
+                $highlightedResult['suggestion'] = $this->suggestImprovement($highlightSubmissions);
             }
         }
 
