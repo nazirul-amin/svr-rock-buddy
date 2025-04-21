@@ -71,12 +71,12 @@ function setSort(key) {
             </thead>
             <tbody class="dark:bg-card divide-y divide-gray-200 bg-white dark:divide-gray-700">
                 <tr v-for="row in rows" :key="row[keyField]" class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
-                    <td v-for="col in columns" :key="col.key" class="px-6 py-4 whitespace-nowrap">
+                    <td v-for="col in columns" :key="col.key" class="px-6 py-4 whitespace-wrap">
                         <slot :name="`cell-${col.key}`" :value="row[col.key]" :row="row">
                             {{ row[col.key] }}
                         </slot>
                     </td>
-                    <td v-if="$slots.actions" class="px-6 py-4 text-right text-sm whitespace-nowrap">
+                    <td v-if="$slots.actions" class="px-6 py-4 text-right text-sm whitespace-wrap">
                         <slot name="actions" :row="row" />
                     </td>
                 </tr>
