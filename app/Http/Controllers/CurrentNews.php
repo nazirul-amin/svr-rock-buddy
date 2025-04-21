@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Result;
 use App\Models\Submission;
+use App\Services\OpenAIService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -108,6 +109,11 @@ class CurrentNews extends Controller
                 'overall_rank' => $overallRank,
                 'total_score' => $participantTotals[$highlightParticipantId]['score'] ?? 0,
             ];
+
+            if ($highlightedResult['overall_rank'] !== 1) {
+                $openAiService = new OpenAIService();
+                $highlightedResult['suggestion'] = $openAiService->suggestImprovement($highlightSubmissions);
+            }
         }
 
         return Inertia::render('News', [

@@ -39,7 +39,7 @@ const submit = () => {
                 <Input v-model="form.email" type="email" placeholder="Your email" class="!bg-white" required />
                 <InputError :message="form.errors.email" />
                 <Button :disabled="form.processing" type="submit" class="w-full">
-                    <LoaderCircle v-if="form.processing" class="h-4 w-4 animate-spin" />
+                    <LoaderCircle v-if="form.processing" class="h-4 w-4 animate-spin cursor-pointer" />
                     <span v-else>{{ form.processing ? 'Checking...' : 'See My Result' }}</span>
                 </Button>
             </form>
