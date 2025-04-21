@@ -41,6 +41,8 @@ const scoreClass = (score: number): string => {
     return 'text-red-500';
 };
 
+const isVideo = (url: string): boolean => /\.(mp4|webm|ogg|mov)$/i.test(url);
+
 // render markdown suggestions
 const formatMarkdown = (md: string): string => marked.parse(md);
 
@@ -82,7 +84,12 @@ onMounted(() => {
                         <Carousel class="relative mb-2 w-full" :key="'overall-' + entry.participant.id + '-carousel'">
                             <CarouselContent>
                                 <CarouselItem v-for="(submission, imgIdx) in entry.submissions" :key="imgIdx">
-                                    <img :src="submission.image" alt="submission" class="h-48 w-full rounded object-cover shadow" />
+                                    <template v-if="isVideo(submission.image)">
+                                        <video :src="submission.image" controls class="h-48 w-full rounded object-cover shadow" />
+                                    </template>
+                                    <template v-else>
+                                        <img :src="submission.image" alt="submission" class="h-48 w-full rounded object-cover shadow" />
+                                    </template>
                                 </CarouselItem>
                             </CarouselContent>
                         </Carousel>
@@ -98,16 +105,21 @@ onMounted(() => {
                     class="relative mx-auto w-full"
                     :plugins="[
                         Autoplay({
-                            delay: 2000,
+                            delay: 5000,
                         }),
                     ]"
                 >
                     <CarouselContent>
-                        <CarouselItem v-for="(submission, index) in submissions" :key="index">
-                            <div class="transform p-2 transition-transform duration-300 hover:scale-105 hover:shadow-lg">
-                                <Card>
-                                    <CardContent class="flex transform items-center justify-center transition-transform hover:scale-105">
-                                        <img :src="submission.image" alt="submission" class="w-full rounded object-cover" />
+                        <CarouselItem v-for="(submission, index) in submissions" :key="index" class="flex-shrink-0">
+                            <div class="transform p-2 w-[600px] h-[600px] transition-transform duration-300 hover:scale-105 hover:shadow-lg mx-auto">
+                                <Card class="h-full">
+                                    <CardContent class="flex transform items-center justify-center h-full w-full transition-transform hover:scale-105">
+                                        <template v-if="isVideo(submission.image)">
+                                            <video :src="submission.image" controls class="h-full w-full object-cover rounded" />
+                                        </template>
+                                        <template v-else>
+                                            <img :src="submission.image" alt="submission" class="h-full w-full object-cover rounded" />
+                                        </template>
                                     </CardContent>
                                 </Card>
                             </div>
@@ -130,13 +142,23 @@ onMounted(() => {
                 <div class="flex-1 space-y-4 p-4">
                     <div v-for="submission in highlightData.submissions" :key="submission.id" class="mb-4 pb-2">
                         <div class="flex items-center gap-2" :class="{ 'flex-col': highlightData.submissions.length == 1 }">
-                            <img
-                                v-if="submission.image"
-                                :src="submission.image"
-                                alt="submission"
-                                class="rounded border object-cover"
-                                :class="{ 'h-48 w-48': highlightData.submissions.length == 1, 'h-32 w-32': highlightData.submissions.length > 1 }"
-                            />
+                            <template v-if="isVideo(submission.image)">
+                                <video
+                                    :src="submission.image"
+                                    controls
+                                    class="rounded border object-cover"
+                                    :class="{ 'h-48 w-48': highlightData.submissions.length == 1, 'h-32 w-32': highlightData.submissions.length > 1 }"
+                                />
+                            </template>
+                            <template v-else>
+                                <img
+                                    v-if="submission.image"
+                                    :src="submission.image"
+                                    alt="submission"
+                                    class="rounded border object-cover"
+                                    :class="{ 'h-48 w-48': highlightData.submissions.length == 1, 'h-32 w-32': highlightData.submissions.length > 1 }"
+                                />
+                            </template>
                             <div :class="{ 'flex flex-col items-center': highlightData.submissions.length == 1 }">
                                 <div class="font-semibold">Theme: {{ submission.theme?.name || submission.theme?.title }}</div>
                                 <div>
