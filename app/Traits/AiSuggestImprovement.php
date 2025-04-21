@@ -2,11 +2,11 @@
 
 namespace App\Traits;
 
-use Illuminate\Support\Collection;
 use App\Models\Submission;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
-use Prism\Prism\Prism;
 use Prism\Prism\Enums\Provider;
+use Prism\Prism\Prism;
 use Prism\Prism\ValueObjects\Messages\Support\Image;
 use Prism\Prism\ValueObjects\Messages\UserMessage;
 
@@ -16,7 +16,6 @@ trait AiSuggestImprovement
      * Generate fun and casual improvement suggestions for a participant.
      *
      * @param  Collection|Submission[]  $submissions
-     * @return string
      */
     public function suggestImprovement(Collection $submissions): string
     {
@@ -25,7 +24,7 @@ trait AiSuggestImprovement
         foreach ($submissions as $submission) {
             $theme = $submission->theme->name ?? 'a mystery theme';
             $score = $submission->score;
-            $path  = $submission->path;
+            $path = $submission->path;
             $image = Image::fromPath(Storage::disk('public')->path($path));
 
             $content = sprintf(

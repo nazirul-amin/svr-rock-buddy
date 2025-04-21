@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Result;
 use App\Models\Submission;
+use App\Traits\AiSuggestImprovement;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use App\Traits\AiSuggestImprovement;
 
 class CurrentNews extends Controller
 {

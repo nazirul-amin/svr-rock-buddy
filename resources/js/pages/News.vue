@@ -8,8 +8,8 @@ import { launchConfettiParty, launchSadParty } from '@/composables/useParty';
 import { Head, router } from '@inertiajs/vue3';
 import Autoplay from 'embla-carousel-autoplay';
 import { Crown, Frown } from 'lucide-vue-next';
-import { computed, onMounted, ref } from 'vue';
 import { marked } from 'marked';
+import { computed, onMounted, ref } from 'vue';
 
 const props = defineProps({
     submissions: Object,
@@ -57,10 +57,10 @@ onMounted(() => {
 </script>
 <template>
     <Head title="News & Highlights" />
-    <div class="bg-muted-foreground min-h-screen w-full py-6 px-4">
+    <div class="bg-muted-foreground min-h-screen w-full px-4 py-6">
         <div class="mx-auto max-w-4xl">
-            <section class="mb-8 rounded-lg bg-gradient-to-r from-indigo-500 via-purple-600 to-pink-500 p-6 text-white text-center">
-                <h2 class="text-3xl font-extrabold mb-2">Rock Buddy Highlights</h2>
+            <section class="mb-8 rounded-lg bg-gradient-to-r from-indigo-500 via-purple-600 to-pink-500 p-6 text-center text-white">
+                <h2 class="mb-2 text-3xl font-extrabold">Rock Buddy Highlights</h2>
                 <blockquote class="italic">"Creativity rocks — dive into the community’s best submissions and get inspired!"</blockquote>
             </section>
             <div class="flex justify-between space-x-4">
@@ -70,7 +70,14 @@ onMounted(() => {
             <div class="mb-8">
                 <h2 class="text-muted mb-2 text-xl font-semibold">Top Three 🎉</h2>
                 <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
-                    <div v-for="(entry, idx) in top3" :key="entry.participant.id" :class="['flex flex-col items-center rounded-lg bg-white p-3 shadow-md transition-transform hover:shadow-xl hover:scale-105', idx === 0 ? 'ring-4 ring-yellow-400' : '']">
+                    <div
+                        v-for="(entry, idx) in top3"
+                        :key="entry.participant.id"
+                        :class="[
+                            'flex flex-col items-center rounded-lg bg-white p-3 shadow-md transition-transform hover:scale-105 hover:shadow-xl',
+                            idx === 0 ? 'ring-4 ring-yellow-400' : '',
+                        ]"
+                    >
                         <div class="text-primary mb-2 text-2xl font-bold">#{{ idx + 1 }}</div>
                         <Carousel class="relative mb-2 w-full" :key="'overall-' + entry.participant.id + '-carousel'">
                             <CarouselContent>
@@ -86,7 +93,7 @@ onMounted(() => {
             </div>
             <h2 class="text-muted mt-8 mb-2 text-xl font-semibold">All Submissions 🖼️</h2>
 
-            <div class="mx-auto w-full mb-8">
+            <div class="mx-auto mb-8 w-full">
                 <Carousel
                     class="relative mx-auto w-full"
                     :plugins="[
@@ -97,9 +104,9 @@ onMounted(() => {
                 >
                     <CarouselContent>
                         <CarouselItem v-for="(submission, index) in submissions" :key="index">
-                            <div class="p-2 transition-transform transform hover:scale-105 hover:shadow-lg duration-300">
+                            <div class="transform p-2 transition-transform duration-300 hover:scale-105 hover:shadow-lg">
                                 <Card>
-                                    <CardContent class="flex items-center justify-center transition-transform transform hover:scale-105">
+                                    <CardContent class="flex transform items-center justify-center transition-transform hover:scale-105">
                                         <img :src="submission.image" alt="submission" class="w-full rounded object-cover" />
                                     </CardContent>
                                 </Card>
@@ -119,8 +126,8 @@ onMounted(() => {
                     <span class="text-xl font-semibold">{{ highlightData.rank === 1 ? 'You won!' : 'Too bad' }}</span>
                 </DialogTitle>
             </DialogHeader>
-            <div v-if="highlightData" class="flex w-full p-4 space-x-8 items-start">
-                <div class="flex-1 p-4 space-y-4">
+            <div v-if="highlightData" class="flex w-full items-start space-x-8 p-4">
+                <div class="flex-1 space-y-4 p-4">
                     <div v-for="submission in highlightData.submissions" :key="submission.id" class="mb-4 pb-2">
                         <div class="flex items-center gap-2" :class="{ 'flex-col': highlightData.submissions.length == 1 }">
                             <img
@@ -139,7 +146,7 @@ onMounted(() => {
                         </div>
                     </div>
                 </div>
-                <div class="flex-1 p-4 flex flex-col justify-between">
+                <div class="flex flex-1 flex-col justify-between p-4">
                     <div>
                         <div v-if="highlightData.rank" class="mb-2 text-2xl font-semibold">
                             Your Ranking: <span class="font-bold">#{{ highlightData.rank }}</span>
@@ -148,15 +155,15 @@ onMounted(() => {
                             Total Score: <span class="font-bold" :class="scoreClass(highlightData.total_score)">{{ highlightData.total_score }}</span>
                         </div>
                     </div>
-                    <div v-if="highlightData.rank === 1" class="bg-green-50 text-black p-4 rounded max-h-80 overflow-y-auto whitespace-pre-line">
-                        <h3 class="font-semibold mb-2">Next Steps</h3>
+                    <div v-if="highlightData.rank === 1" class="max-h-80 overflow-y-auto rounded bg-green-50 p-4 whitespace-pre-line text-black">
+                        <h3 class="mb-2 font-semibold">Next Steps</h3>
                         <p class="text-sm">
                             Congratulations on your first place win! We appreciate your participation and look forward to your next submission!
                         </p>
                     </div>
-                    <div v-else-if="highlightData.suggestion" class="bg-yellow-50 text-black p-4 rounded max-h-80 overflow-y-auto">
-                        <h3 class="font-semibold mb-2">Improvement Suggestions</h3>
-                        <div v-html="formatMarkdown(highlightData.suggestion)" class="text-sm prose" />
+                    <div v-else-if="highlightData.suggestion" class="max-h-80 overflow-y-auto rounded bg-yellow-50 p-4 text-black">
+                        <h3 class="mb-2 font-semibold">Improvement Suggestions</h3>
+                        <div v-html="formatMarkdown(highlightData.suggestion)" class="prose text-sm" />
                     </div>
                 </div>
             </div>
