@@ -165,7 +165,7 @@ const copyLink = (route, label = 'Link') => {
                                     <tr v-for="submission in submissions" :key="submission.id">
                                         <td class="px-6 py-4 whitespace-nowrap">{{ submission.participant?.name || '-' }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap">{{ submission.participant?.email || '-' }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">{{ submission.participant?.score || '-' }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">{{ submission?.score || '-' }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             {{ submission.created_at ? new Date(submission.created_at).toLocaleString() : '-' }}
                                         </td>
