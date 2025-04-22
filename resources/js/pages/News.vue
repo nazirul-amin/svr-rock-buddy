@@ -113,12 +113,14 @@ onMounted(() => {
                         <CarouselItem v-for="(submission, index) in submissions" :key="index" class="flex-shrink-0">
                             <div class="transform p-2 w-full sm:w-[600px] h-auto sm:h-[600px] transition-transform duration-300 hover:scale-105 hover:shadow-lg mx-auto">
                                 <Card class="h-full">
-                                    <CardContent class="flex transform items-center justify-center h-full w-full transition-transform hover:scale-105">
+                                    <CardContent
+                                        class="flex h-full w-full transform items-center justify-center transition-transform hover:scale-105"
+                                    >
                                         <template v-if="isVideo(submission.image)">
-                                            <video :src="submission.image" controls class="h-full w-full object-cover rounded" />
+                                            <video :src="submission.image" controls class="h-full w-full rounded object-cover" />
                                         </template>
                                         <template v-else>
-                                            <img :src="submission.image" alt="submission" class="h-full w-full object-cover rounded" />
+                                            <img :src="submission.image" alt="submission" class="h-full w-full rounded object-cover" />
                                         </template>
                                     </CardContent>
                                 </Card>
