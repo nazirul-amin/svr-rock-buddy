@@ -62,11 +62,11 @@ onMounted(() => {
     <div class="bg-muted-foreground min-h-screen w-full px-4 py-6">
         <div class="mx-auto max-w-4xl">
             <section class="mb-8 rounded-lg bg-gradient-to-r from-indigo-500 via-purple-600 to-pink-500 p-6 text-center text-white">
-                <h2 class="mb-2 text-2xl md:text-3xl font-extrabold">Rock Buddy Highlights</h2>
+                <h2 class="mb-2 text-2xl font-extrabold md:text-3xl">Rock Buddy Highlights</h2>
                 <blockquote class="italic">"Creativity rocks — dive into the community’s best submissions and get inspired!"</blockquote>
             </section>
-            <div class="flex flex-col md:flex-row justify-between space-y-4 md:space-y-0 md:space-x-4">
-                <h1 class="text-primary mb-6 text-2xl md:text-3xl font-bold drop-shadow-md">{{ title?.length == 1 ? title[0] : title }}</h1>
+            <div class="flex flex-col justify-between space-y-4 md:flex-row md:space-y-0 md:space-x-4">
+                <h1 class="text-primary mb-6 text-2xl font-bold drop-shadow-md md:text-3xl">{{ title?.length == 1 ? title[0] : title }}</h1>
                 <Button variant="default" @click="router.visit('/')" class="cursor-pointer">Go Back</Button>
             </div>
             <div class="mb-8">
@@ -111,7 +111,9 @@ onMounted(() => {
                 >
                     <CarouselContent>
                         <CarouselItem v-for="(submission, index) in submissions" :key="index" class="flex-shrink-0">
-                            <div class="transform p-2 w-full sm:w-[600px] h-auto sm:h-[600px] transition-transform duration-300 hover:scale-105 hover:shadow-lg mx-auto">
+                            <div
+                                class="mx-auto h-auto w-full transform p-2 transition-transform duration-300 hover:scale-105 hover:shadow-lg sm:h-[600px] sm:w-[600px]"
+                            >
                                 <Card class="h-full">
                                     <CardContent
                                         class="flex h-full w-full transform items-center justify-center transition-transform hover:scale-105"
@@ -132,7 +134,7 @@ onMounted(() => {
         </div>
     </div>
     <Dialog v-model:open="showDialog">
-        <DialogContent class="w-full mx-4 sm:mx-auto sm:max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogContent class="mx-4 max-h-[90vh] w-full overflow-y-auto sm:mx-auto sm:max-w-2xl">
             <DialogHeader>
                 <DialogTitle class="flex items-center space-x-2">
                     <Crown class="text-yellow-500" v-if="highlightData.rank === 1" />
@@ -140,7 +142,7 @@ onMounted(() => {
                     <span class="text-xl font-semibold">{{ highlightData.rank === 1 ? 'You won!' : 'Too bad' }}</span>
                 </DialogTitle>
             </DialogHeader>
-            <div v-if="highlightData" class="flex flex-col sm:flex-row w-full items-start space-y-4 sm:space-y-0 sm:space-x-8 p-4">
+            <div v-if="highlightData" class="flex w-full flex-col items-start space-y-4 p-4 sm:flex-row sm:space-y-0 sm:space-x-8">
                 <div class="flex-1 space-y-4 p-4">
                     <div v-for="submission in highlightData.submissions" :key="submission.id" class="mb-4 pb-2">
                         <div class="flex items-center gap-2" :class="{ 'flex-col': highlightData.submissions.length == 1 }">
@@ -191,7 +193,7 @@ onMounted(() => {
                     </div>
                 </div>
             </div>
-            <DialogFooter class="flex flex-col-reverse sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-4">
+            <DialogFooter class="flex flex-col-reverse items-center space-y-2 sm:flex-row sm:space-y-0 sm:space-x-4">
                 <p class="inline-flex items-center">
                     {{ highlightData.rank === 1 ? "Congratulations! don't forget to claim your prize" : 'Almost there! Try again next month' }}
                 </p>
