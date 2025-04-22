@@ -117,9 +117,7 @@ const breadcrumbs = [
                                                 <InputError :message="form.errors.score" />
                                             </DialogHeader>
                                             <DialogFooter>
-                                                <Button type="button" @click="submit()" class="cursor-pointer bg-green-500"
-                                                    >Add Score</Button
-                                                >
+                                                <Button type="button" @click="submit()" class="cursor-pointer bg-green-500">Add Score</Button>
                                             </DialogFooter>
                                         </DialogContent>
                                     </Dialog>

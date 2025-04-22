@@ -5,35 +5,35 @@ import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carouse
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { useAudio } from '@/composables/useAudio';
 import { launchConfettiParty, launchSadParty } from '@/composables/useParty';
-import { Head, router } from '@inertiajs/vue3';
+import { Head } from '@inertiajs/vue3';
 import Autoplay from 'embla-carousel-autoplay';
 import { Crown, Frown } from 'lucide-vue-next';
 import { marked } from 'marked';
 import { computed, onMounted, ref } from 'vue';
 
 interface SubmissionItem {
-  id: number;
-  image: string | null;
-  theme: { id: string; name: string };
-  score: number;
+    id: number;
+    image: string | null;
+    theme: { id: string; name: string };
+    score: number;
 }
 interface Top3Entry {
-  participant: { id: string; name: string };
-  submissions: SubmissionItem[];
-  score: number;
+    participant: { id: string; name: string };
+    submissions: SubmissionItem[];
+    score: number;
 }
 interface HighlightedResult {
-  overall_rank: number;
-  total_score: number;
-  submissions: SubmissionItem[];
-  suggestion?: string;
+    overall_rank: number;
+    total_score: number;
+    submissions: SubmissionItem[];
+    suggestion?: string;
 }
 
 const props = defineProps<{
-  submissions: SubmissionItem[];
-  top3: Top3Entry[];
-  highlightedResult: HighlightedResult | null;
-  title: string | string[];
+    submissions: SubmissionItem[];
+    top3: Top3Entry[];
+    highlightedResult: HighlightedResult | null;
+    title: string | string[];
 }>();
 
 const { submissions, top3, highlightedResult, title } = props;
@@ -41,24 +41,24 @@ const { submissions, top3, highlightedResult, title } = props;
 const showDialog = ref(!!highlightedResult);
 
 const highlightData = computed(() => {
-  if (highlightedResult) {
-    return {
-      rank: highlightedResult.overall_rank,
-      total_score: highlightedResult.total_score,
-      submissions: highlightedResult.submissions,
-      suggestion: highlightedResult.suggestion ?? null,
-    };
-  }
-  return null;
+    if (highlightedResult) {
+        return {
+            rank: highlightedResult.overall_rank,
+            total_score: highlightedResult.total_score,
+            submissions: highlightedResult.submissions,
+            suggestion: highlightedResult.suggestion ?? null,
+        };
+    }
+    return null;
 });
 
 const { play: playConfetti } = useAudio('/audio/win.mp3');
 const { play: playSad } = useAudio('/audio/lose.mp3');
 
 const scoreClass = (score: number): string => {
-  if (score >= 8) return 'text-green-500';
-  if (score >= 4) return 'text-yellow-500';
-  return 'text-red-500';
+    if (score >= 8) return 'text-green-500';
+    if (score >= 4) return 'text-yellow-500';
+    return 'text-red-500';
 };
 
 const isVideo = (url: string | null): boolean => !!url && /\.(mp4|webm|ogg|mov)$/i.test(url);
@@ -67,14 +67,14 @@ const isVideo = (url: string | null): boolean => !!url && /\.(mp4|webm|ogg|mov)$
 const formatMarkdown = (md: string): string => marked.parse(md);
 
 onMounted(() => {
-  if (highlightData.value && highlightData.value.rank === 1) {
-    showDialog.value = true;
-    setTimeout(() => launchConfettiParty(), 2000);
-    playConfetti();
-  } else if (highlightData.value && highlightData.value.rank != 1) {
-    launchSadParty();
-    playSad();
-  }
+    if (highlightData.value && highlightData.value.rank === 1) {
+        showDialog.value = true;
+        setTimeout(() => launchConfettiParty(), 2000);
+        playConfetti();
+    } else if (highlightData.value && highlightData.value.rank != 1) {
+        launchSadParty();
+        playSad();
+    }
 });
 </script>
 <template>
@@ -86,21 +86,29 @@ onMounted(() => {
                 <blockquote class="italic">Dive into the community’s best submissions and get inspired!</blockquote>
             </section>
             <div class="flex flex-col justify-between space-y-4 md:flex-row md:space-y-0 md:space-x-4">
-                <h1 class="text-white mb-6 text-2xl font-bold drop-shadow-md md:text-3xl">{{ title?.length == 1 ? title[0] : title }}</h1>
+                <h1 class="mb-6 text-2xl font-bold text-white drop-shadow-md md:text-3xl">{{ title?.length == 1 ? title[0] : title }}</h1>
             </div>
             <div class="mb-8">
-                <div class="flex justify-center flex-col md:flex-row md:items-end space-y-4 md:space-y-0 md:space-x-6 mb-8">
+                <div class="mb-8 flex flex-col justify-center space-y-4 md:flex-row md:items-end md:space-y-0 md:space-x-6">
                     <!-- Second Place -->
-                    <div v-if="top3[1]" class="flex flex-col items-center transform md:-translate-y-4">
+                    <div v-if="top3[1]" class="flex transform flex-col items-center md:-translate-y-4">
                         <div class="text-2xl font-bold text-gray-700">#2</div>
                         <Carousel class="h-56 w-56" :key="'overall-' + top3[1].participant.id + '-carousel'">
                             <CarouselContent>
                                 <CarouselItem v-for="(submission, imgIdx) in top3[1].submissions" :key="imgIdx">
                                     <template v-if="isVideo(submission.image)">
-                                        <video :src="submission.image" controls class="h-56 w-56 rounded-full object-cover shadow ring-2 ring-gray-300" />
+                                        <video
+                                            :src="submission.image"
+                                            controls
+                                            class="h-56 w-56 rounded-full object-cover shadow ring-2 ring-gray-300"
+                                        />
                                     </template>
                                     <template v-else>
-                                        <img :src="submission.image" alt="submission" class="h-56 w-56 rounded-full object-cover shadow ring-2 ring-gray-300" />
+                                        <img
+                                            :src="submission.image"
+                                            alt="submission"
+                                            class="h-56 w-56 rounded-full object-cover shadow ring-2 ring-gray-300"
+                                        />
                                     </template>
                                 </CarouselItem>
                             </CarouselContent>
@@ -109,16 +117,24 @@ onMounted(() => {
                         <div class="text-gray-500">Score: {{ top3[1].score }}</div>
                     </div>
                     <!-- First Place -->
-                    <div v-if="top3[0]" class="flex flex-col items-center transform md:-translate-y-6">
+                    <div v-if="top3[0]" class="flex transform flex-col items-center md:-translate-y-6">
                         <div class="text-3xl font-bold text-yellow-500">#1</div>
                         <Carousel class="h-72 w-72" :key="'overall-' + top3[0].participant.id + '-carousel'">
                             <CarouselContent>
                                 <CarouselItem v-for="(submission, imgIdx) in top3[0].submissions" :key="imgIdx">
                                     <template v-if="isVideo(submission.image)">
-                                        <video :src="submission.image" controls class="h-72 w-72 rounded-full object-cover shadow ring-4 ring-yellow-300" />
+                                        <video
+                                            :src="submission.image"
+                                            controls
+                                            class="h-72 w-72 rounded-full object-cover shadow ring-4 ring-yellow-300"
+                                        />
                                     </template>
                                     <template v-else>
-                                        <img :src="submission.image" alt="submission" class="h-72 w-72 rounded-full object-cover shadow ring-4 ring-yellow-300" />
+                                        <img
+                                            :src="submission.image"
+                                            alt="submission"
+                                            class="h-72 w-72 rounded-full object-cover shadow ring-4 ring-yellow-300"
+                                        />
                                     </template>
                                 </CarouselItem>
                             </CarouselContent>
@@ -127,16 +143,24 @@ onMounted(() => {
                         <div class="text-gray-500">Score: {{ top3[0].score }}</div>
                     </div>
                     <!-- Third Place -->
-                    <div v-if="top3[2]" class="flex flex-col items-center transform md:translate-y-2">
+                    <div v-if="top3[2]" class="flex transform flex-col items-center md:translate-y-2">
                         <div class="text-xl font-bold text-gray-500">#3</div>
                         <Carousel class="h-42 w-42" :key="'overall-' + top3[2].participant.id + '-carousel'">
                             <CarouselContent>
                                 <CarouselItem v-for="(submission, imgIdx) in top3[2].submissions" :key="imgIdx">
                                     <template v-if="isVideo(submission.image)">
-                                        <video :src="submission.image" controls class="h-42 w-42 rounded-full object-cover shadow ring-2 ring-gray-400" />
+                                        <video
+                                            :src="submission.image"
+                                            controls
+                                            class="h-42 w-42 rounded-full object-cover shadow ring-2 ring-gray-400"
+                                        />
                                     </template>
                                     <template v-else>
-                                        <img :src="submission.image" alt="submission" class="h-42 w-42 rounded-full object-cover shadow ring-2 ring-gray-400" />
+                                        <img
+                                            :src="submission.image"
+                                            alt="submission"
+                                            class="h-42 w-42 rounded-full object-cover shadow ring-2 ring-gray-400"
+                                        />
                                     </template>
                                 </CarouselItem>
                             </CarouselContent>
