@@ -23,7 +23,7 @@ class StoreSubmissionRequest extends FormRequest
     {
         return [
             'email' => ['required', 'email', 'exists:participants,email'],
-            'file' => ['required', 'file', 'mimes:jpg,jpeg,png,mp4', 'max:204800'],
+            'file' => ['required', 'file', 'mimes:jpg,jpeg,png,mp4,mov', 'max:204800'],
         ];
     }
 }

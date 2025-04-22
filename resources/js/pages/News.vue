@@ -36,8 +36,8 @@ const { play: playConfetti } = useAudio('/audio/win.mp3');
 const { play: playSad } = useAudio('/audio/lose.mp3');
 
 const scoreClass = (score: number): string => {
-    if (score >= 40) return 'text-green-500';
-    if (score >= 10) return 'text-yellow-500';
+    if (score >= 8) return 'text-green-500';
+    if (score >= 4) return 'text-yellow-500';
     return 'text-red-500';
 };
 
