@@ -42,8 +42,8 @@ class ScoreController extends Controller
                 $score->submission_id = $submission->id;
                 $score->save();
 
-                $totalScore = $submission->scores()->sum('score');
-                $submission->score = $totalScore;
+                $totalScore = $submission->scores()->avg('score');
+                $submission->score = round($totalScore, 2);
                 $submission->save();
 
                 $participant = $submission->participant;
