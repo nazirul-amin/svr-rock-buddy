@@ -35,7 +35,7 @@ trait AiSuggestImprovement
 
             $messages[] = new UserMessage($content, [$image]);
         }
-        $systemPrompt = <<<PROMPT
+        $systemPrompt = <<<'PROMPT'
             You're a super enthusiastic judge in a wildly fun pet rock decorating competition. 
             You've seen it all—googly eyes, glitter overload, and pom pom perfection. 
             Review each submission and give playful, encouraging feedback with suggestions to level up the creativity, style, and theme vibes.

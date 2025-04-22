@@ -6,8 +6,8 @@ use App\Models\Result;
 use App\Models\Submission;
 use App\Traits\AiSuggestImprovement;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
 use Illuminate\Support\Collection;
+use Inertia\Inertia;
 
 class CurrentNews extends Controller
 {
@@ -21,19 +21,19 @@ class CurrentNews extends Controller
         $activeResult = $this->getActiveResult();
         if (! $activeResult) {
             return Inertia::render('News', [
-                'top3'             => collect(),
-                'title'            => null,
-                'submissions'      => collect(),
-                'highlightedResult'=> null,
+                'top3' => collect(),
+                'title' => null,
+                'submissions' => collect(),
+                'highlightedResult' => null,
             ]);
         }
 
-        $themeIds    = $activeResult->themes->pluck('id');
+        $themeIds = $activeResult->themes->pluck('id');
         $submissions = $this->getSubmissions($themeIds);
 
-        $themesData        = $this->assembleThemeData($submissions, $activeResult->themes);
+        $themesData = $this->assembleThemeData($submissions, $activeResult->themes);
         $participantTotals = $this->calculateParticipantTotals($themesData);
-        $top3              = $this->getTopParticipants($participantTotals, $submissions);
+        $top3 = $this->getTopParticipants($participantTotals, $submissions);
 
         $highlightedResult = $this->buildHighlightedResult(
             $request->query('participant'),
@@ -42,10 +42,10 @@ class CurrentNews extends Controller
         );
 
         return Inertia::render('News', [
-            'top3'             => $top3,
-            'title'            => $this->formatTitle($activeResult->themes),
-            'submissions'      => $submissions,
-            'highlightedResult'=> $highlightedResult,
+            'top3' => $top3,
+            'title' => $this->formatTitle($activeResult->themes),
+            'submissions' => $submissions,
+            'highlightedResult' => $highlightedResult,
         ]);
     }
 
@@ -68,11 +68,11 @@ class CurrentNews extends Controller
             ->whereIn('theme_id', $themeIds)
             ->get()
             ->map(fn (Submission $submission) => [
-                'id'          => $submission->id,
-                'image'       => $submission->path ? asset("storage/{$submission->path}") : null,
+                'id' => $submission->id,
+                'image' => $submission->path ? asset("storage/{$submission->path}") : null,
                 'participant' => $submission->participant?->only('id', 'name'),
-                'theme'       => $submission->theme?->only('id', 'name'),
-                'score'       => $submission->score ?? 0,
+                'theme' => $submission->theme?->only('id', 'name'),
+                'score' => $submission->score ?? 0,
             ]);
     }
 
@@ -84,7 +84,7 @@ class CurrentNews extends Controller
         $data = [];
         foreach ($themes as $theme) {
             $data[$theme->id] = [
-                'theme'        => $theme->only('id', 'name'),
+                'theme' => $theme->only('id', 'name'),
                 'participants' => [],
             ];
         }
@@ -96,16 +96,16 @@ class CurrentNews extends Controller
                 continue;
             }
 
-            $entry =& $data[$tId]['participants'][$pId];
+            $entry = &$data[$tId]['participants'][$pId];
             if (! isset($entry)) {
                 $entry = [
-                    'participant'   => $sub['participant'],
-                    'total_score'   => 0,
+                    'participant' => $sub['participant'],
+                    'total_score' => 0,
                     'attempt_count' => 0,
                 ];
             }
 
-            $entry['total_score']   += $sub['score'];
+            $entry['total_score'] += $sub['score'];
             $entry['attempt_count']++;
         }
 
@@ -131,14 +131,14 @@ class CurrentNews extends Controller
         foreach ($themesData as $themeId => $themeEntry) {
             foreach ($themeEntry['participants'] as $pId => $pData) {
                 $totals[$pId]['participant'] = $pData['participant'];
-                $totals[$pId]['scores'][]   = $pData['average_score'];
+                $totals[$pId]['scores'][] = $pData['average_score'];
             }
         }
 
         return collect($totals)
             ->map(fn ($data) => [
-                'participant'  => $data['participant'],
-                'score'        => array_sum($data['scores']),
+                'participant' => $data['participant'],
+                'score' => array_sum($data['scores']),
                 'theme_scores' => $data['scores'],
             ])
             ->sortByDesc('score')
@@ -154,7 +154,7 @@ class CurrentNews extends Controller
             ->take($limit)
             ->map(fn ($entry) => array_merge($entry, [
                 'submissions' => $submissions
-                    ->filter(fn($s) => $s['participant']['id'] === $entry['participant']['id'])
+                    ->filter(fn ($s) => $s['participant']['id'] === $entry['participant']['id'])
                     ->values()
                     ->all(),
             ]))
@@ -185,14 +185,14 @@ class CurrentNews extends Controller
 
         $highlight = [
             'participant_id' => $participantId,
-            'submissions'    => $subs->map(fn ($sub) => [
-                'id'    => $sub->id,
+            'submissions' => $subs->map(fn ($sub) => [
+                'id' => $sub->id,
                 'image' => $sub->path ? asset("storage/{$sub->path}") : null,
                 'theme' => $sub->theme?->only('id', 'name'),
                 'score' => $sub->score,
             ]),
-            'overall_rank'   => $overallRank,
-            'total_score'    => $participantTotals->firstWhere('participant.id', $participantId)['score'] ?? 0,
+            'overall_rank' => $overallRank,
+            'total_score' => $participantTotals->firstWhere('participant.id', $participantId)['score'] ?? 0,
         ];
 
         if ($overallRank !== 1) {
@@ -212,6 +212,7 @@ class CurrentNews extends Controller
         }
 
         $names = $themes->pluck('name');
+
         return $names->count() > 1
             ? $names->implode(' x ')
             : $names->first();
