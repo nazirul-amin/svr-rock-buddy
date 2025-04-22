@@ -109,21 +109,11 @@ class CurrentNews extends Controller
             $entry['attempt_count']++;
         }
 
-        foreach ($data as &$themeEntry) {
-            foreach ($themeEntry['participants'] as &$pData) {
-                $pData['average_score'] = $pData['attempt_count']
-                    ? $pData['total_score'] / $pData['attempt_count']
-                    : 0;
-            }
-            unset($pData);
-        }
-        unset($themeEntry);
-
         return $data;
     }
 
     /**
-     * Compute overall participant average score across all themes.
+     * Compute overall participant score across all themes.
      */
     private function calculateParticipantTotals(array $themesData): Collection
     {
@@ -131,7 +121,7 @@ class CurrentNews extends Controller
         foreach ($themesData as $themeId => $themeEntry) {
             foreach ($themeEntry['participants'] as $pId => $pData) {
                 $totals[$pId]['participant'] = $pData['participant'];
-                $totals[$pId]['scores'][] = $pData['average_score'];
+                $totals[$pId]['scores'][] = $pData['total_score'];
             }
         }
 
