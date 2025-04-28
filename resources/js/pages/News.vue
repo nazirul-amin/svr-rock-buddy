@@ -89,84 +89,30 @@ onMounted(() => {
                 <h1 class="mb-6 text-2xl font-bold text-white drop-shadow-md md:text-3xl">{{ title?.length == 1 ? title[0] : title }}</h1>
             </div>
             <div class="mb-8">
-                <div class="mb-8 flex flex-col justify-center space-y-4 md:flex-row md:items-end md:space-y-0 md:space-x-6">
-                    <!-- Second Place -->
-                    <div v-if="top3[1]" class="flex transform flex-col items-center md:-translate-y-4">
-                        <div class="text-2xl font-bold text-gray-700">#2</div>
-                        <Carousel class="h-56 w-56" :key="'overall-' + top3[1].participant.id + '-carousel'">
+                 <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
+                     <div
+                         v-for="(entry, idx) in top3"
+                         :key="entry.participant.id"
+                         :class="[
+                             'flex flex-col items-center rounded-lg bg-white p-3 shadow-md transition-transform hover:scale-105 hover:shadow-xl',
+                             idx === 0 ? 'ring-4 ring-yellow-400' : '',
+                         ]"
+                     >
+                         <div class="text-primary mb-2 text-2xl font-bold">#{{ idx + 1 }}</div>
+                         <Carousel class="relative mb-2 w-full" :key="'overall-' + entry.participant.id + '-carousel'">
                             <CarouselContent>
-                                <CarouselItem v-for="(submission, imgIdx) in top3[1].submissions" :key="imgIdx">
+                                <CarouselItem v-for="(submission, imgIdx) in entry.submissions" :key="imgIdx">
                                     <template v-if="isVideo(submission.image)">
-                                        <video
-                                            :src="submission.image"
-                                            controls
-                                            class="h-56 w-56 rounded-full object-cover shadow ring-2 ring-gray-300"
-                                        />
+                                        <video :src="submission.image" controls class="h-48 w-full rounded object-cover shadow" />
                                     </template>
                                     <template v-else>
-                                        <img
-                                            :src="submission.image"
-                                            alt="submission"
-                                            class="h-56 w-56 rounded-full object-cover shadow ring-2 ring-gray-300"
-                                        />
+                                        <img :src="submission.image" alt="submission" class="h-48 w-full rounded object-cover shadow" />
                                     </template>
                                 </CarouselItem>
                             </CarouselContent>
-                        </Carousel>
-                        <div class="mt-2 font-semibold text-gray-800">{{ top3[1].participant.name }}</div>
-                        <div class="text-gray-500">Score: {{ top3[1].score }}</div>
-                    </div>
-                    <!-- First Place -->
-                    <div v-if="top3[0]" class="flex transform flex-col items-center md:-translate-y-6">
-                        <div class="text-3xl font-bold text-yellow-500">#1</div>
-                        <Carousel class="h-72 w-72" :key="'overall-' + top3[0].participant.id + '-carousel'">
-                            <CarouselContent>
-                                <CarouselItem v-for="(submission, imgIdx) in top3[0].submissions" :key="imgIdx">
-                                    <template v-if="isVideo(submission.image)">
-                                        <video
-                                            :src="submission.image"
-                                            controls
-                                            class="h-72 w-72 rounded-full object-cover shadow ring-4 ring-yellow-300"
-                                        />
-                                    </template>
-                                    <template v-else>
-                                        <img
-                                            :src="submission.image"
-                                            alt="submission"
-                                            class="h-72 w-72 rounded-full object-cover shadow ring-4 ring-yellow-300"
-                                        />
-                                    </template>
-                                </CarouselItem>
-                            </CarouselContent>
-                        </Carousel>
-                        <div class="mt-2 font-semibold text-gray-800">{{ top3[0].participant.name }}</div>
-                        <div class="text-gray-500">Score: {{ top3[0].score }}</div>
-                    </div>
-                    <!-- Third Place -->
-                    <div v-if="top3[2]" class="flex transform flex-col items-center md:translate-y-2">
-                        <div class="text-xl font-bold text-gray-500">#3</div>
-                        <Carousel class="h-42 w-42" :key="'overall-' + top3[2].participant.id + '-carousel'">
-                            <CarouselContent>
-                                <CarouselItem v-for="(submission, imgIdx) in top3[2].submissions" :key="imgIdx">
-                                    <template v-if="isVideo(submission.image)">
-                                        <video
-                                            :src="submission.image"
-                                            controls
-                                            class="h-42 w-42 rounded-full object-cover shadow ring-2 ring-gray-400"
-                                        />
-                                    </template>
-                                    <template v-else>
-                                        <img
-                                            :src="submission.image"
-                                            alt="submission"
-                                            class="h-42 w-42 rounded-full object-cover shadow ring-2 ring-gray-400"
-                                        />
-                                    </template>
-                                </CarouselItem>
-                            </CarouselContent>
-                        </Carousel>
-                        <div class="mt-2 font-semibold text-gray-800">{{ top3[2].participant.name }}</div>
-                        <div class="text-gray-500">Score: {{ top3[2].score }}</div>
+                         </Carousel>
+                         <div class="font-semibold text-gray-800">{{ entry?.participant?.name }}</div>
+                         <div class="text-gray-500">Total Score: {{ entry?.score }}</div>
                     </div>
                 </div>
             </div>
