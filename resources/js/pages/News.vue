@@ -89,17 +89,17 @@ onMounted(() => {
                 <h1 class="mb-6 text-2xl font-bold text-white drop-shadow-md md:text-3xl">{{ title?.length == 1 ? title[0] : title }}</h1>
             </div>
             <div class="mb-8">
-                 <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
-                     <div
-                         v-for="(entry, idx) in top3"
-                         :key="entry.participant.id"
-                         :class="[
-                             'flex flex-col items-center rounded-lg bg-white p-3 shadow-md transition-transform hover:scale-105 hover:shadow-xl',
-                             idx === 0 ? 'ring-4 ring-yellow-400' : '',
-                         ]"
-                     >
-                         <div class="text-primary mb-2 text-2xl font-bold">#{{ idx + 1 }}</div>
-                         <Carousel class="relative mb-2 w-full" :key="'overall-' + entry.participant.id + '-carousel'">
+                <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
+                    <div
+                        v-for="(entry, idx) in top3"
+                        :key="entry.participant.id"
+                        :class="[
+                            'flex flex-col items-center rounded-lg bg-white p-3 shadow-md transition-transform hover:scale-105 hover:shadow-xl',
+                            idx === 0 ? 'ring-4 ring-yellow-400' : '',
+                        ]"
+                    >
+                        <div class="text-primary mb-2 text-2xl font-bold">#{{ idx + 1 }}</div>
+                        <Carousel class="relative mb-2 w-full" :key="'overall-' + entry.participant.id + '-carousel'">
                             <CarouselContent>
                                 <CarouselItem v-for="(submission, imgIdx) in entry.submissions" :key="imgIdx">
                                     <template v-if="isVideo(submission.image)">
@@ -110,9 +110,9 @@ onMounted(() => {
                                     </template>
                                 </CarouselItem>
                             </CarouselContent>
-                         </Carousel>
-                         <div class="font-semibold text-gray-800">{{ entry?.participant?.name }}</div>
-                         <div class="text-gray-500">Total Score: {{ entry?.score }}</div>
+                        </Carousel>
+                        <div class="font-semibold text-gray-800">{{ entry?.participant?.name }}</div>
+                        <div class="text-gray-500">Total Score: {{ entry?.score }}</div>
                     </div>
                 </div>
             </div>
